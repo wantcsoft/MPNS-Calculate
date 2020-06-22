@@ -12812,3 +12812,6 @@
 [2020-06-22 10:17:53] [info]  标记物 = 13, 旧版本号 = 2, 数值 = 1002.24, mom值 = 0.6400
 [2020-06-22 10:17:53] [info]  旧风险串  = high|2|1|0|0|0&||||||||||||||||
 [2020-06-22 10:17:53] [info]  新风险串 = high|2|1|0|0|0&||||||||||||||||
+[2020-06-22 11:07:21] [info]  驱动 = {SQL Server}， server = DESKTOP-SM51UF2\MOZZIE, database_name = Mozzie, user_name = john, password = 1234
+[2020-06-22 11:07:21] [info]  数据库登陆成功！
+[2020-06-22 11:07:21] [info]  数据库连接成功, server = DESKTOP-SM51UF2\MOZZIE, databaseName = Mozzie, user = john, password = 1234
