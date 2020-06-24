@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from threading import Thread
 from dataCalculation import TCDownsGraph, LoggerFile
 from sqlServer.QueryData import QueryData
@@ -11,11 +12,13 @@ class CalculateThreading(Thread):
     median_config = {}
     weight_config = {}
 
-    def __init__(self, dll_path, config_ini_path, lock, queue):
+    def __init__(self, dll_path, config_ini_path, lock, queue, median_flag, weight_flag):
         super().__init__()
         self.dll_path = dll_path
         self.config_ini_path = config_ini_path
         self.queue = queue
+        self.median_flag = median_flag
+        self.weight_flag = weight_flag
         # 线程资源锁
         self.lock = lock
         # downs计算
@@ -38,8 +41,6 @@ class CalculateThreading(Thread):
                 break
             data = self.data_list.pop()
             self.lock.release()
-            print(data)
-
             self.handle_data(data)
 
     def handle_data(self, data):
@@ -47,20 +48,21 @@ class CalculateThreading(Thread):
         logger.info("CheckNo = %s" % self.checkNo)
         if data.SolutionRiskSerialID is None:
             logger.error("SolutionRiskSerialID为空, CheckNo = %s" % self.checkNo)
-            print("SolutionRiskSerialID为空", self.checkNo)
+            self.queue.put(self.checkNo)
+            return False
+        plan = self.connect.query_screening_plan(data.SolutionRiskSerialID)[0][0]
+        if int(plan) == 3 and (data.EarlySampleSerialID is None or data.MiddleSampleSerialID is None):
+            logger.error("该条数据是联合方案，计算缺少样本, CheckNo = %s" % self.checkNo)
             self.queue.put(self.checkNo)
             return False
         if data.EarlySampleSerialID is None and data.MiddleSampleSerialID is None:
             logger.error("该条数据没有样本号, CheckNo = %s" % self.checkNo)
-            print("该条数据没有样本号", self.checkNo)
             self.queue.put(self.checkNo)
             return False
-
         # 获取孕周类型
         if data.GestationType_E is None:
             if data.GestationType_M is None:
                 logger.error("该条数据没有孕周类型, CheckNo = %s" % self.checkNo)
-                print("该条数据没有孕周类型", self.checkNo)
                 self.queue.put(self.checkNo)
                 return False
             else:
@@ -71,26 +73,38 @@ class CalculateThreading(Thread):
         old_parameter = self.connect.query_parameterList(data.SolutionRiskSerialID)[0][0]
         logger.info("old_parameter = %s" % old_parameter)
         # 如果没有拿到拼串，则开始计算下一条数据
-        if old_parameter is None:
-            logger.error("该条数据没有拼串, CheckNo = %s" % self.checkNo)
-            print("该条数据没有拼串", self.checkNo)
-            self.queue.put(self.checkNo)
-            return False
+        if old_parameter is None or old_parameter == "":
+            list = self.handle_no_parameter(data, gestation_type)
         else:
-            r16 = old_parameter.split("&")[1].split("|")
-            r11 = old_parameter.split("&")[0].split("|")
-        # 如果配置了中位数版本，处理第二个拼串
-        if len(self.median_config) > 1:
-            # 得到跟新过的新的拼串
-            r16 = self.handle_median(r16, gestation_type, data)
-        # 如果配置了体重校正参数，处理第一个拼串
-        if len(self.weight_config) > 1:
-            r11 = self.handle_weight(r11)
-        r11 = "|".join(r11)
-        r16 = "|".join(r16)
+            # 当数据库有拼串的时候
+            list = old_parameter.split("&")
+            r11 = list[0].split("|")
+            r16 = list[1].split("|")
+            # 如果配置了中位数版本，处理第二个拼串
+            if self.median_flag:
+                # 一个孕妇她测试了多少个标记物，按照123……进行排序放进list中
+                self.median_list = {}
+                # 遍历前14条数据，不为空说明该种标记物有值，上次进行了计算
+                for i in range(1, 14):
+                    if r16[i] != "":
+                        self.median_list[self.item_convert(i)] = 0
+                # 一种特殊的标记物NT_E2需要特殊判断一下
+                if r16[39] != "":
+                    logger.info("该条数据有标记物NT_E2")
+                    self.median_list["16"] = 0
+                # 得到跟新过的新的拼串
+                r16 = self.handle_median(r16, gestation_type, data)
+            # 如果配置了体重校正参数，处理第一个拼串
+            if self.weight_flag:
+                r11 = self.handle_weight(r11)
+            list[0] = "|".join(r11)
+            list[1] = "|".join(r16)
         # 将拼串放进dll进行计算
-        result = self.tcdowns.calculate(r11, r16)
-        new_parameter = "&".join([r11, r16])
+        result = self.tcdowns.calculate(list[0], list[1])
+        temp = list[0].split("|")
+        temp[6] = "{0}"
+        list[0] = "|".join(temp)
+        new_parameter = "&".join(list)
         logger.info("new_parameter = %s" % new_parameter)
         # mom值结果
         mom = result[0].split("|")
@@ -99,6 +113,107 @@ class CalculateThreading(Thread):
         risk = result[1].split("|")
         self.handle_risk(risk, ONTDResult, new_parameter, data.SolutionRiskSerialID)
 
+    # 当数据库中没有拼串时
+    def handle_no_parameter(self, data, gestation_type):
+        # 设置第一段拼串
+        param = self.connect.no_query_r11(data.SolutionRiskSerialID)[0]
+        r11 = [""] * 84
+        r11[0] = "0"
+        r11[1] = "2003"
+        r11[2] = "0"
+        r11[3] = str(int(param.DownsCritical))
+        r11[4] = str(int(param.ONTDCritical))
+        r11[5] = str(int(param.TrisomyCritical))
+        r11[8] = "{1}_Print.bmp"
+        r11[9] = str(param.ONTDCriticalType)
+        r11[10] = str(param.USELimit)
+        r11[11] = str(param.USETwoTrisomyRisk)
+        # 配置第一个拼串12--71
+        r11 = self.handle_weight(r11)
+        r11[72] = str(float("%.4f" % param.PatuaCritical))
+        r11[73] = "0"
+        r11[74] = "1.0000"
+        r11[75] = "1.0000"
+        r11[76] = "1.0000"
+        r11[77] = "1.0000"
+        r11[78] = "1.0000"
+        r11[79] = "1.0000"
+        r11[80] = "1.0000"
+        r11[81] = "1.0000"
+        r11[82] = "1.0000"
+        r11[83] = "1.0000"
+        # 设置第二段拼串
+        r16 = [""] * 49
+        r16[0] = "0"
+        # 获取检测的方案和标记物的种类
+        testItems = param.TestItems.split("|")
+        self.median_list = {}
+        for i in testItems:
+            if int(i) < 7:
+                if int(i) == 2:
+                    r16[self.convert_item(i)] = str(self.connect.query_item_value(data.MiddleSampleSerialID, i)[0][0]/1000)
+                else:
+                    r16[self.convert_item(i)] = str(self.connect.query_item_value(data.MiddleSampleSerialID, i)[0][0])
+            else:
+                if int(i) == 9:
+                    r16[self.convert_item(i)] = str(self.connect.query_item_value(data.EarlySampleSerialID, i)[0][0]/1000)
+                else:
+                    r16[self.convert_item(i)] = str(self.connect.query_item_value(data.EarlySampleSerialID, i)[0][0])
+            self.median_list[i] = 0
+        # 处理第二段拼串1--26还有39,40
+        r16 = self.handle_median(r16, gestation_type, data)
+        if data.EarlySampleSerialID is not None:
+            patientInfo = self.connect.query_premature_age(data.EarlySampleSerialID)[0]
+            r16[28] = str(float('%.2f' % patientInfo.ChildBirthDateAge))
+            r16[38] = str(patientInfo.Weight)
+            r16[37] = str(patientInfo.GestationWeek*7 + patientInfo.GestationDay)
+            # CRL孕周日
+            if gestation_type == 3:
+                sampling_day = datetime.date(patientInfo.SamplingDate).day
+                crl = self.connect.query_CRL_weekday(data.EarlySampleSerialID, gestation_type)[0].CheckDate
+                if crl is not None:
+                    check_day = datetime.date(crl).day
+                    r16[48] = str(patientInfo.GestationWeek * 7 + patientInfo.GestationDay + (check_day - sampling_day))
+        if data.MiddleSampleSerialID is not None:
+            patientInfo = self.connect.query_premature_age(data.MiddleSampleSerialID)[0]
+            r16[28] = str(float('%.2f' % patientInfo.ChildBirthDateAge))
+            r16[30] = str(patientInfo.Weight)
+            if r16[37] != "":
+                r16[37] = str(patientInfo.GestationWeek * 7 + patientInfo.GestationDay)
+            r16[47] = str(patientInfo.GestationWeek*7 + patientInfo.GestationDay)
+            # CRL孕周日
+            if gestation_type == 3:
+                sampling_day = datetime.date(patientInfo.SamplingDate).day
+                crl = self.connect.query_CRL_weekday(data.MiddleSampleSerialID, gestation_type)[0].CheckDate
+                if crl is not None:
+                    check_day = datetime.date(crl).day
+                    r16[48] = str(patientInfo.GestationWeek*7 + patientInfo.GestationDay + (check_day - sampling_day))
+        r16[29] = str(self.connect.query_people_color(data.PatientSerialID)[0][0])
+        list_31 = self.connect.query_r16_31_36(data.PregnantSerialID)[0]
+        r16[31] = str(list_31.Diabetes)
+        r16[32] = str(list_31.FetalNumber)
+        r16[33] = "2" if gestation_type != 1 else "1"
+        r16[34] = str(list_31.IVF)
+        r16[35] = str(list_31.SmokeHistory)
+        r16[36] = str(list_31.DownsHistory)
+        if data.EarlySampleSerialID is not None:
+            crl_len = self.connect.query_NT_MedianValue(data.EarlySampleSerialID, gestation_type)[0]
+            if crl_len.CheckValueOne is None and crl_len.CheckValueTwo is None:
+                if crl_len.CheckValue is None:
+                    r16[41] = "0"
+                    r16[42] = "0"
+                else:
+                    r16[41] = str(crl_len.CheckValue)
+                    r16[42] = str(crl_len.CheckValue)
+            else:
+                r16[41] = str(crl_len.CheckValueOne)
+                r16[42] = str(crl_len.CheckValueTwo)
+        r16[43] = "0"
+        r16[44] = "0"
+        r16[45] = "0"
+        r11 = "|".join(r11)
+        r16 = "|".join(r16)
+        return [r11, r16, "0&0|1.0000|1.0000|1.0000|0|0|1.0000|1.0000|1.0000|0|1.0000&"]
 
     # 处理第一个拼串
     def handle_weight(self, r11):
@@ -167,16 +282,6 @@ class CalculateThreading(Thread):
 
     # 处理第二个拼串
     def handle_median(self, r16, gestation_type, data):
-        # 一个孕妇她测试了多少个标记物，按照123……进行排序放进list中
-        self.median_list = {}
-        # 遍历前14条数据，不为空说明该种标记物有值，上次进行了计算
-        for i in range(1, 14):
-            if r16[i] != "":
-                self.median_list[self.item_convert(i)] = 0
-        # 一种特殊的标记物NT_E2需要特殊判断一下
-        if r16[39] != "":
-            logger.info("该条数据有标记物NT_E2")
-            self.median_list["16"] = 0
         # 获取孕妇的孕周类型，孕周类型不会改变，前中期的孕周都一样
         items = self.median_config.get(str(gestation_type))
         # 遍历标记物集合，取出对应的重新设定的标记物版本和赋予中位数值
@@ -256,7 +361,6 @@ class CalculateThreading(Thread):
         check_data = self.connect.query_NT_MedianValue(sampleSerialID, gestation_type)[0]
         if len(check_data) == 0:
             logger.error("checkNo = %s, 获取不到7号标记物长度" % self.checkNo)
-            print("获取不到7号标记物长度", self.checkNo)
             self.queue.put(self.checkNo)
             return []
 

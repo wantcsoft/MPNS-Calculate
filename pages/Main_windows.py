@@ -2,8 +2,8 @@
 import os
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtWidgets import QMainWindow, QComboBox, QApplication
 import time
 from pages import Median_dialog, Database_dialog, Warning_database, Warning_median, Weight_dialog, Multithreading_dialog
 from dataCalculation import MultiThreading, LoggerFile
@@ -85,7 +85,7 @@ class UiMainWindow(QMainWindow):
         self.title.setText("MPNS批量计算工具")
         self.label.setText("测试日期范围")
         self.label_workflow_sign.setText("筛查流程状态选择")
-        self.no_risk.setText("尚未生成风险(数据库有拼串)")
+        self.no_risk.setText("尚未生成风险")
         self.have_risk.setText("已生成风险，待提交")
         self.to_check.setText("已提交审核，待审核")
         self.have_check.setText("已审核通过")
@@ -104,8 +104,8 @@ class UiMainWindow(QMainWindow):
     # 主窗口设置
     def main_window_setting(self):
         # 主窗口设置
-        self.resize(1200, 700)
-        self.setMinimumSize(QtCore.QSize(1200, 700))
+        self.resize(1200, 600)
+        self.setMinimumSize(QtCore.QSize(1200, 600))
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.setMouseTracking(False)
         self.setWindowOpacity(1.0)
@@ -202,7 +202,7 @@ class UiMainWindow(QMainWindow):
     # 一筛查流程状态选择
     def label_workflow_sign_setting(self):
         self.label_workflow_sign = QtWidgets.QLabel(self.centralwidget)
-        self.label_workflow_sign.setGeometry(QtCore.QRect(600, 180, 300, 80))
+        self.label_workflow_sign.setGeometry(QtCore.QRect(600, 170, 300, 80))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label_workflow_sign.setFont(font)
@@ -210,7 +210,7 @@ class UiMainWindow(QMainWindow):
     # 测试日期范围
     def label_setting(self):
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(100, 180, 300, 80))
+        self.label.setGeometry(QtCore.QRect(100, 170, 300, 80))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label.setFont(font)
@@ -219,7 +219,7 @@ class UiMainWindow(QMainWindow):
     def progressBar_setting(self):
         # 进度条设置
         self.progressBar = QtWidgets.QLabel(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(100, 470, 400, 60))
+        self.progressBar.setGeometry(QtCore.QRect(100, 410, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.progressBar.setFont(font)
@@ -228,88 +228,78 @@ class UiMainWindow(QMainWindow):
     # 工作流状态
     def workflow_setting(self):
         # 设置工作流程的位置
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(600, 240, 400, 180))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-
         # 工作流状态
-        self.no_risk = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.no_risk = QtWidgets.QCheckBox(self.centralwidget)
+        self.no_risk.setGeometry(QtCore.QRect(600, 230, 300, 30))
         self.no_risk.setObjectName("no_risk")
         self.no_risk.click()
         font = QtGui.QFont()
         font.setPointSize(11)
         self.no_risk.setFont(font)
-        self.verticalLayout.addWidget(self.no_risk)
-        self.have_risk = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+
+        self.have_risk = QtWidgets.QCheckBox(self.centralwidget)
+        self.have_risk.setGeometry(QtCore.QRect(600, 270, 300, 30))
         self.have_risk.setObjectName("have_risk")
         self.have_risk.click()
         font = QtGui.QFont()
         font.setPointSize(11)
         self.have_risk.setFont(font)
-        self.verticalLayout.addWidget(self.have_risk)
-        self.to_check = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+
+        self.to_check = QtWidgets.QCheckBox(self.centralwidget)
+        self.to_check.setGeometry(QtCore.QRect(600, 310, 300, 30))
         self.to_check.setObjectName("to_check")
         self.to_check.click()
         font = QtGui.QFont()
         font.setPointSize(11)
         self.to_check.setFont(font)
-        self.verticalLayout.addWidget(self.to_check)
-        self.have_check = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+
+        self.have_check = QtWidgets.QCheckBox(self.centralwidget)
+        self.have_check.setGeometry(QtCore.QRect(600, 350, 300, 30))
         self.have_check.setObjectName("have_check")
         self.have_check.click()
         font = QtGui.QFont()
         font.setPointSize(11)
         self.have_check.setFont(font)
-        self.verticalLayout.addWidget(self.have_check)
 
     # 开始时间结束时间设置
     def time_setting(self):
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(100, 240, 320, 180))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
         # # 开始时间结束时间设置
-        self.dateEdit = QtWidgets.QDateEdit(self.verticalLayoutWidget)
+        self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
+        self.dateEdit.setGeometry(QtCore.QRect(100, 230, 200, 30))
         self.dateEdit.setObjectName("dateEdit")
         self.dateEdit.setDate(QDate.currentDate())
         font = QtGui.QFont()
         font.setPointSize(11)
         self.dateEdit.setFont(font)
-        self.verticalLayout.addWidget(self.dateEdit)
 
-        self.dateEdit_2 = QtWidgets.QDateEdit(self.verticalLayoutWidget)
+        self.dateEdit_2 = QtWidgets.QDateEdit(self.centralwidget)
+        self.dateEdit_2.setGeometry(QtCore.QRect(100, 270, 200, 30))
         self.dateEdit_2.setObjectName("dateEdit_2")
         self.dateEdit_2.setDate(QDate.currentDate())
         font = QtGui.QFont()
         font.setPointSize(11)
         self.dateEdit_2.setFont(font)
-        self.verticalLayout.addWidget(self.dateEdit_2)
 
-        self.radioButton = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton.setGeometry(QtCore.QRect(100, 310, 350, 30))
         self.radioButton.setObjectName("radioButton")
         self.radioButton.click()
         font = QtGui.QFont()
         font.setPointSize(11)
         self.radioButton.setFont(font)
-        self.verticalLayout.addWidget(self.radioButton)
 
-        self.radioButton_2 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        self.radioButton_2.setObjectName("have_check")
+        self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton_2.setGeometry(QtCore.QRect(100, 350, 350, 30))
+        self.radioButton_2.setObjectName("radioButton_2")
         font = QtGui.QFont()
         font.setPointSize(11)
         self.radioButton_2.setFont(font)
-        self.verticalLayout.addWidget(self.radioButton_2)
 
     # 数据总数文字显示
     def page_count_setting(self):
         # 筛选数据总数量
         self.lable_total = QtWidgets.QLabel(self.centralwidget)
-        self.lable_total.setGeometry(QtCore.QRect(100, 420, 400, 60))
+        self.lable_total.setGeometry(QtCore.QRect(100, 370, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_total.setFont(font)
@@ -319,7 +309,7 @@ class UiMainWindow(QMainWindow):
     def lable_exception_setting(self):
         # 筛选数据总数量
         self.lable_exception = QtWidgets.QLabel(self.centralwidget)
-        self.lable_exception.setGeometry(QtCore.QRect(100, 520, 400, 60))
+        self.lable_exception.setGeometry(QtCore.QRect(100, 450, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_exception.setFont(font)
@@ -329,7 +319,7 @@ class UiMainWindow(QMainWindow):
     def lable_start_time_setting(self):
         # 筛选数据总数量
         self.lable_start_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_start_time.setGeometry(QtCore.QRect(600, 420, 400, 60))
+        self.lable_start_time.setGeometry(QtCore.QRect(600, 370, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_start_time.setFont(font)
@@ -339,7 +329,7 @@ class UiMainWindow(QMainWindow):
     def lable_complete_time_setting(self):
         # 筛选数据总数量
         self.lable_complete_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_complete_time.setGeometry(QtCore.QRect(600, 470, 400, 60))
+        self.lable_complete_time.setGeometry(QtCore.QRect(600, 410, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_complete_time.setFont(font)
@@ -348,7 +338,7 @@ class UiMainWindow(QMainWindow):
     # 计算剩余时间
     def lable_left_time_setting(self):
         self.lable_left_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_left_time.setGeometry(QtCore.QRect(600, 520, 400, 60))
+        self.lable_left_time.setGeometry(QtCore.QRect(600, 450, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_left_time.setFont(font)
@@ -357,7 +347,7 @@ class UiMainWindow(QMainWindow):
     # 总共花费时间时间
     def lable_spend_time_setting(self):
         self.lable_spend_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_spend_time.setGeometry(QtCore.QRect(600, 570, 400, 60))
+        self.lable_spend_time.setGeometry(QtCore.QRect(600, 490, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_spend_time.setFont(font)
@@ -367,7 +357,7 @@ class UiMainWindow(QMainWindow):
     def calculate_sucess_setting(self):
         # 筛选数据总数量
         self.calculate_sucess = QtWidgets.QLabel(self.centralwidget)
-        self.calculate_sucess.setGeometry(QtCore.QRect(510, 620, 180, 50))
+        self.calculate_sucess.setGeometry(QtCore.QRect(360, 520, 180, 50))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.calculate_sucess.setFont(font)
@@ -378,15 +368,15 @@ class UiMainWindow(QMainWindow):
     def check_error_button_setting(self):
         # 计算按钮
         self.check_error = QtWidgets.QPushButton(self.centralwidget)
-        self.check_error.setGeometry(QtCore.QRect(350, 530, 80, 30))
+        self.check_error.setGeometry(QtCore.QRect(350, 460, 80, 30))
         self.check_error.setObjectName("check_error")
         self.check_error.clicked.connect(self.check_error_start)
 
     # 查看异常按钮点击之后
     def check_error_start(self):
-        if self.error_count > 0:
-            file_path = LoggerFile.error_path
-            os.startfile(file_path)
+        # if self.error_count > 0:
+        file_path = LoggerFile.error_path
+        os.startfile(file_path)
 
     # 计算按钮点击之后
     def calculate_start(self):
@@ -504,6 +494,10 @@ class UiMainWindow(QMainWindow):
         # BC页面数据填充
         self.ui_median.BC_content_filling()
         self.ui_database.close()
+        # 初始化中位数配置
+        self.get_median_config()
+        # 初始化体重矫正参数配置
+        self.get_weight_config()
 
     # 打开数据库设置窗口
     def show_database(self):
@@ -514,172 +508,170 @@ class UiMainWindow(QMainWindow):
 
     # 中位数是否配置完成,并且将中位数版本的选择保存起来
     def get_median_config(self):
+        dict_LMP = {}
+        dict_LMP["1"] = 0 if self.ui_median.version_LMP_1.currentText() == "" else \
+            self.ui_median.version_LMP_1.currentText().split("  ")[0]
+        dict_LMP["2"] = 0 if self.ui_median.version_LMP_2.currentText() == "" else \
+            self.ui_median.version_LMP_2.currentText().split("  ")[0]
+        dict_LMP["3"] = 0 if self.ui_median.version_LMP_3.currentText() == "" else \
+            self.ui_median.version_LMP_3.currentText().split("  ")[0]
+        dict_LMP["4"] = 0 if self.ui_median.version_LMP_4.currentText() == "" else \
+            self.ui_median.version_LMP_4.currentText().split("  ")[0]
+        dict_LMP["5"] = 0 if self.ui_median.version_LMP_5.currentText() == "" else \
+            self.ui_median.version_LMP_5.currentText().split("  ")[0]
+        dict_LMP["6"] = 0 if self.ui_median.version_LMP_6.currentText() == "" else \
+            self.ui_median.version_LMP_6.currentText().split("  ")[0]
+        dict_LMP["7"] = 0 if self.ui_median.version_LMP_7.currentText() == "" else \
+            self.ui_median.version_LMP_7.currentText().split("  ")[0]
+        dict_LMP["8"] = 0 if self.ui_median.version_LMP_8.currentText() == "" else \
+            self.ui_median.version_LMP_8.currentText().split("  ")[0]
+        dict_LMP["9"] = 0 if self.ui_median.version_LMP_9.currentText() == "" else \
+            self.ui_median.version_LMP_9.currentText().split("  ")[0]
+        dict_LMP["10"] = 0 if self.ui_median.version_LMP_10.currentText() == "" else \
+            self.ui_median.version_LMP_10.currentText().split("  ")[0]
+        dict_LMP["11"] = 0 if self.ui_median.version_LMP_11.currentText() == "" else \
+            self.ui_median.version_LMP_11.currentText().split("  ")[0]
+        dict_LMP["12"] = 0 if self.ui_median.version_LMP_12.currentText() == "" else \
+            self.ui_median.version_LMP_12.currentText().split("  ")[0]
+        dict_LMP["13"] = 0 if self.ui_median.version_LMP_13.currentText() == "" else \
+            self.ui_median.version_LMP_13.currentText().split("  ")[0]
+        dict_BPD = {}
+        dict_BPD["1"] = 0 if self.ui_median.version_BPD_1.currentText() == "" else \
+            self.ui_median.version_BPD_1.currentText().split("  ")[0]
+        dict_BPD["2"] = 0 if self.ui_median.version_BPD_2.currentText() == "" else \
+            self.ui_median.version_BPD_2.currentText().split("  ")[0]
+        dict_BPD["3"] = 0 if self.ui_median.version_BPD_3.currentText() == "" else \
+            self.ui_median.version_BPD_3.currentText().split("  ")[0]
+        dict_BPD["4"] = 0 if self.ui_median.version_BPD_4.currentText() == "" else \
+            self.ui_median.version_BPD_4.currentText().split("  ")[0]
+        dict_BPD["5"] = 0 if self.ui_median.version_BPD_5.currentText() == "" else \
+            self.ui_median.version_BPD_5.currentText().split("  ")[0]
+        dict_BPD["6"] = 0 if self.ui_median.version_BPD_6.currentText() == "" else \
+            self.ui_median.version_BPD_6.currentText().split("  ")[0]
+        dict_BPD["7"] = 0 if self.ui_median.version_BPD_7.currentText() == "" else \
+            self.ui_median.version_BPD_7.currentText().split("  ")[0]
+        dict_BPD["8"] = 0 if self.ui_median.version_BPD_8.currentText() == "" else \
+            self.ui_median.version_BPD_8.currentText().split("  ")[0]
+        dict_BPD["9"] = 0 if self.ui_median.version_BPD_9.currentText() == "" else \
+            self.ui_median.version_BPD_9.currentText().split("  ")[0]
+        dict_BPD["10"] = 0 if self.ui_median.version_BPD_10.currentText() == "" else \
+            self.ui_median.version_BPD_10.currentText().split("  ")[0]
+        dict_BPD["11"] = 0 if self.ui_median.version_BPD_11.currentText() == "" else \
+            self.ui_median.version_BPD_11.currentText().split("  ")[0]
+        dict_BPD["12"] = 0 if self.ui_median.version_BPD_12.currentText() == "" else \
+            self.ui_median.version_BPD_12.currentText().split("  ")[0]
+        dict_BPD["13"] = 0 if self.ui_median.version_BPD_13.currentText() == "" else \
+            self.ui_median.version_BPD_13.currentText().split("  ")[0]
+        dict_CRL = {}
+        dict_CRL["1"] = 0 if self.ui_median.version_CRL_1.currentText() == "" else \
+            self.ui_median.version_CRL_1.currentText().split("  ")[0]
+        dict_CRL["2"] = 0 if self.ui_median.version_CRL_2.currentText() == "" else \
+            self.ui_median.version_CRL_2.currentText().split("  ")[0]
+        dict_CRL["3"] = 0 if self.ui_median.version_CRL_3.currentText() == "" else \
+            self.ui_median.version_CRL_3.currentText().split("  ")[0]
+        dict_CRL["4"] = 0 if self.ui_median.version_CRL_4.currentText() == "" else \
+            self.ui_median.version_CRL_4.currentText().split("  ")[0]
+        dict_CRL["5"] = 0 if self.ui_median.version_CRL_5.currentText() == "" else \
+            self.ui_median.version_CRL_5.currentText().split("  ")[0]
+        dict_CRL["6"] = 0 if self.ui_median.version_CRL_6.currentText() == "" else \
+            self.ui_median.version_CRL_6.currentText().split("  ")[0]
+        dict_CRL["7"] = 0 if self.ui_median.version_CRL_7.currentText() == "" else \
+            self.ui_median.version_CRL_7.currentText().split("  ")[0]
+        dict_CRL["8"] = 0 if self.ui_median.version_CRL_8.currentText() == "" else \
+            self.ui_median.version_CRL_8.currentText().split("  ")[0]
+        dict_CRL["9"] = 0 if self.ui_median.version_CRL_9.currentText() == "" else \
+            self.ui_median.version_CRL_9.currentText().split("  ")[0]
+        dict_CRL["10"] = 0 if self.ui_median.version_CRL_10.currentText() == "" else \
+            self.ui_median.version_CRL_10.currentText().split("  ")[0]
+        dict_CRL["11"] = 0 if self.ui_median.version_CRL_11.currentText() == "" else \
+            self.ui_median.version_CRL_11.currentText().split("  ")[0]
+        dict_CRL["12"] = 0 if self.ui_median.version_CRL_12.currentText() == "" else \
+            self.ui_median.version_CRL_12.currentText().split("  ")[0]
+        dict_CRL["13"] = 0 if self.ui_median.version_CRL_13.currentText() == "" else \
+            self.ui_median.version_CRL_13.currentText().split("  ")[0]
+        dict_IVF = {}
+        dict_IVF["1"] = 0 if self.ui_median.version_IVF_1.currentText() == "" else \
+            self.ui_median.version_IVF_1.currentText().split("  ")[0]
+        dict_IVF["2"] = 0 if self.ui_median.version_IVF_2.currentText() == "" else \
+            self.ui_median.version_IVF_2.currentText().split("  ")[0]
+        dict_IVF["3"] = 0 if self.ui_median.version_IVF_3.currentText() == "" else \
+            self.ui_median.version_IVF_3.currentText().split("  ")[0]
+        dict_IVF["4"] = 0 if self.ui_median.version_IVF_4.currentText() == "" else \
+            self.ui_median.version_IVF_4.currentText().split("  ")[0]
+        dict_IVF["5"] = 0 if self.ui_median.version_IVF_5.currentText() == "" else \
+            self.ui_median.version_IVF_5.currentText().split("  ")[0]
+        dict_IVF["6"] = 0 if self.ui_median.version_IVF_6.currentText() == "" else \
+            self.ui_median.version_IVF_6.currentText().split("  ")[0]
+        dict_IVF["7"] = 0 if self.ui_median.version_IVF_7.currentText() == "" else \
+            self.ui_median.version_IVF_7.currentText().split("  ")[0]
+        dict_IVF["8"] = 0 if self.ui_median.version_IVF_8.currentText() == "" else \
+            self.ui_median.version_IVF_8.currentText().split("  ")[0]
+        dict_IVF["9"] = 0 if self.ui_median.version_IVF_9.currentText() == "" else \
+            self.ui_median.version_IVF_9.currentText().split("  ")[0]
+        dict_IVF["10"] = 0 if self.ui_median.version_IVF_10.currentText() == "" else \
+            self.ui_median.version_IVF_10.currentText().split("  ")[0]
+        dict_IVF["11"] = 0 if self.ui_median.version_IVF_11.currentText() == "" else \
+            self.ui_median.version_IVF_11.currentText().split("  ")[0]
+        dict_IVF["12"] = 0 if self.ui_median.version_IVF_12.currentText() == "" else \
+            self.ui_median.version_IVF_12.currentText().split("  ")[0]
+        dict_IVF["13"] = 0 if self.ui_median.version_IVF_13.currentText() == "" else \
+            self.ui_median.version_IVF_13.currentText().split("  ")[0]
+        dict_BC = {}
+        dict_BC["1"] = 0 if self.ui_median.version_BC_1.currentText() == "" else \
+            self.ui_median.version_BC_1.currentText().split("  ")[0]
+        dict_BC["2"] = 0 if self.ui_median.version_BC_2.currentText() == "" else \
+            self.ui_median.version_BC_2.currentText().split("  ")[0]
+        dict_BC["3"] = 0 if self.ui_median.version_BC_3.currentText() == "" else \
+            self.ui_median.version_BC_3.currentText().split("  ")[0]
+        dict_BC["4"] = 0 if self.ui_median.version_BC_4.currentText() == "" else \
+            self.ui_median.version_BC_4.currentText().split("  ")[0]
+        dict_BC["5"] = 0 if self.ui_median.version_BC_5.currentText() == "" else \
+            self.ui_median.version_BC_5.currentText().split("  ")[0]
+        dict_BC["6"] = 0 if self.ui_median.version_BC_6.currentText() == "" else \
+            self.ui_median.version_BC_6.currentText().split("  ")[0]
+        dict_BC["7"] = 0 if self.ui_median.version_BC_7.currentText() == "" else \
+            self.ui_median.version_BC_7.currentText().split("  ")[0]
+        dict_BC["8"] = 0 if self.ui_median.version_BC_8.currentText() == "" else \
+            self.ui_median.version_BC_8.currentText().split("  ")[0]
+        dict_BC["9"] = 0 if self.ui_median.version_BC_9.currentText() == "" else \
+            self.ui_median.version_BC_9.currentText().split("  ")[0]
+        dict_BC["10"] = 0 if self.ui_median.version_BC_10.currentText() == "" else \
+            self.ui_median.version_BC_10.currentText().split("  ")[0]
+        dict_BC["11"] = 0 if self.ui_median.version_BC_11.currentText() == "" else \
+            self.ui_median.version_BC_11.currentText().split("  ")[0]
+        dict_BC["12"] = 0 if self.ui_median.version_BC_12.currentText() == "" else \
+            self.ui_median.version_BC_12.currentText().split("  ")[0]
+        dict_BC["13"] = 0 if self.ui_median.version_BC_13.currentText() == "" else \
+            self.ui_median.version_BC_13.currentText().split("  ")[0]
+        self.median_config = {"1": dict_LMP, "2": dict_BPD, "3": dict_CRL, "4": dict_IVF, "5": dict_BC}
         if self.checkBox_median.isChecked():
-            dict_LMP = {}
-            dict_LMP["1"] = 0 if self.ui_median.version_LMP_1.currentText() == "" else \
-                self.ui_median.version_LMP_1.currentText().split("  ")[0]
-            dict_LMP["2"] = 0 if self.ui_median.version_LMP_2.currentText() == "" else \
-                self.ui_median.version_LMP_2.currentText().split("  ")[0]
-            dict_LMP["3"] = 0 if self.ui_median.version_LMP_3.currentText() == "" else \
-                self.ui_median.version_LMP_3.currentText().split("  ")[0]
-            dict_LMP["4"] = 0 if self.ui_median.version_LMP_4.currentText() == "" else \
-                self.ui_median.version_LMP_4.currentText().split("  ")[0]
-            dict_LMP["5"] = 0 if self.ui_median.version_LMP_5.currentText() == "" else \
-                self.ui_median.version_LMP_5.currentText().split("  ")[0]
-            dict_LMP["6"] = 0 if self.ui_median.version_LMP_6.currentText() == "" else \
-                self.ui_median.version_LMP_6.currentText().split("  ")[0]
-            dict_LMP["7"] = 0 if self.ui_median.version_LMP_7.currentText() == "" else \
-                self.ui_median.version_LMP_7.currentText().split("  ")[0]
-            dict_LMP["8"] = 0 if self.ui_median.version_LMP_8.currentText() == "" else \
-                self.ui_median.version_LMP_8.currentText().split("  ")[0]
-            dict_LMP["9"] = 0 if self.ui_median.version_LMP_9.currentText() == "" else \
-                self.ui_median.version_LMP_9.currentText().split("  ")[0]
-            dict_LMP["10"] = 0 if self.ui_median.version_LMP_10.currentText() == "" else \
-                self.ui_median.version_LMP_10.currentText().split("  ")[0]
-            dict_LMP["11"] = 0 if self.ui_median.version_LMP_11.currentText() == "" else \
-                self.ui_median.version_LMP_11.currentText().split("  ")[0]
-            dict_LMP["12"] = 0 if self.ui_median.version_LMP_12.currentText() == "" else \
-                self.ui_median.version_LMP_12.currentText().split("  ")[0]
-            dict_LMP["13"] = 0 if self.ui_median.version_LMP_13.currentText() == "" else \
-                self.ui_median.version_LMP_13.currentText().split("  ")[0]
-            dict_BPD = {}
-            dict_BPD["1"] = 0 if self.ui_median.version_BPD_1.currentText() == "" else \
-                self.ui_median.version_BPD_1.currentText().split("  ")[0]
-            dict_BPD["2"] = 0 if self.ui_median.version_BPD_2.currentText() == "" else \
-                self.ui_median.version_BPD_2.currentText().split("  ")[0]
-            dict_BPD["3"] = 0 if self.ui_median.version_BPD_3.currentText() == "" else \
-                self.ui_median.version_BPD_3.currentText().split("  ")[0]
-            dict_BPD["4"] = 0 if self.ui_median.version_BPD_4.currentText() == "" else \
-                self.ui_median.version_BPD_4.currentText().split("  ")[0]
-            dict_BPD["5"] = 0 if self.ui_median.version_BPD_5.currentText() == "" else \
-                self.ui_median.version_BPD_5.currentText().split("  ")[0]
-            dict_BPD["6"] = 0 if self.ui_median.version_BPD_6.currentText() == "" else \
-                self.ui_median.version_BPD_6.currentText().split("  ")[0]
-            dict_BPD["7"] = 0 if self.ui_median.version_BPD_7.currentText() == "" else \
-                self.ui_median.version_BPD_7.currentText().split("  ")[0]
-            dict_BPD["8"] = 0 if self.ui_median.version_BPD_8.currentText() == "" else \
-                self.ui_median.version_BPD_8.currentText().split("  ")[0]
-            dict_BPD["9"] = 0 if self.ui_median.version_BPD_9.currentText() == "" else \
-                self.ui_median.version_BPD_9.currentText().split("  ")[0]
-            dict_BPD["10"] = 0 if self.ui_median.version_BPD_10.currentText() == "" else \
-                self.ui_median.version_BPD_10.currentText().split("  ")[0]
-            dict_BPD["11"] = 0 if self.ui_median.version_BPD_11.currentText() == "" else \
-                self.ui_median.version_BPD_11.currentText().split("  ")[0]
-            dict_BPD["12"] = 0 if self.ui_median.version_BPD_12.currentText() == "" else \
-                self.ui_median.version_BPD_12.currentText().split("  ")[0]
-            dict_BPD["13"] = 0 if self.ui_median.version_BPD_13.currentText() == "" else \
-                self.ui_median.version_BPD_13.currentText().split("  ")[0]
-            dict_CRL = {}
-            dict_CRL["1"] = 0 if self.ui_median.version_CRL_1.currentText() == "" else \
-                self.ui_median.version_CRL_1.currentText().split("  ")[0]
-            dict_CRL["2"] = 0 if self.ui_median.version_CRL_2.currentText() == "" else \
-                self.ui_median.version_CRL_2.currentText().split("  ")[0]
-            dict_CRL["3"] = 0 if self.ui_median.version_CRL_3.currentText() == "" else \
-                self.ui_median.version_CRL_3.currentText().split("  ")[0]
-            dict_CRL["4"] = 0 if self.ui_median.version_CRL_4.currentText() == "" else \
-                self.ui_median.version_CRL_4.currentText().split("  ")[0]
-            dict_CRL["5"] = 0 if self.ui_median.version_CRL_5.currentText() == "" else \
-                self.ui_median.version_CRL_5.currentText().split("  ")[0]
-            dict_CRL["6"] = 0 if self.ui_median.version_CRL_6.currentText() == "" else \
-                self.ui_median.version_CRL_6.currentText().split("  ")[0]
-            dict_CRL["7"] = 0 if self.ui_median.version_CRL_7.currentText() == "" else \
-                self.ui_median.version_CRL_7.currentText().split("  ")[0]
-            dict_CRL["8"] = 0 if self.ui_median.version_CRL_8.currentText() == "" else \
-                self.ui_median.version_CRL_8.currentText().split("  ")[0]
-            dict_CRL["9"] = 0 if self.ui_median.version_CRL_9.currentText() == "" else \
-                self.ui_median.version_CRL_9.currentText().split("  ")[0]
-            dict_CRL["10"] = 0 if self.ui_median.version_CRL_10.currentText() == "" else \
-                self.ui_median.version_CRL_10.currentText().split("  ")[0]
-            dict_CRL["11"] = 0 if self.ui_median.version_CRL_11.currentText() == "" else \
-                self.ui_median.version_CRL_11.currentText().split("  ")[0]
-            dict_CRL["12"] = 0 if self.ui_median.version_CRL_12.currentText() == "" else \
-                self.ui_median.version_CRL_12.currentText().split("  ")[0]
-            dict_CRL["13"] = 0 if self.ui_median.version_CRL_13.currentText() == "" else \
-                self.ui_median.version_CRL_13.currentText().split("  ")[0]
-            dict_IVF = {}
-            dict_IVF["1"] = 0 if self.ui_median.version_IVF_1.currentText() == "" else \
-                self.ui_median.version_IVF_1.currentText().split("  ")[0]
-            dict_IVF["2"] = 0 if self.ui_median.version_IVF_2.currentText() == "" else \
-                self.ui_median.version_IVF_2.currentText().split("  ")[0]
-            dict_IVF["3"] = 0 if self.ui_median.version_IVF_3.currentText() == "" else \
-                self.ui_median.version_IVF_3.currentText().split("  ")[0]
-            dict_IVF["4"] = 0 if self.ui_median.version_IVF_4.currentText() == "" else \
-                self.ui_median.version_IVF_4.currentText().split("  ")[0]
-            dict_IVF["5"] = 0 if self.ui_median.version_IVF_5.currentText() == "" else \
-                self.ui_median.version_IVF_5.currentText().split("  ")[0]
-            dict_IVF["6"] = 0 if self.ui_median.version_IVF_6.currentText() == "" else \
-                self.ui_median.version_IVF_6.currentText().split("  ")[0]
-            dict_IVF["7"] = 0 if self.ui_median.version_IVF_7.currentText() == "" else \
-                self.ui_median.version_IVF_7.currentText().split("  ")[0]
-            dict_IVF["8"] = 0 if self.ui_median.version_IVF_8.currentText() == "" else \
-                self.ui_median.version_IVF_8.currentText().split("  ")[0]
-            dict_IVF["9"] = 0 if self.ui_median.version_IVF_9.currentText() == "" else \
-                self.ui_median.version_IVF_9.currentText().split("  ")[0]
-            dict_IVF["10"] = 0 if self.ui_median.version_IVF_10.currentText() == "" else \
-                self.ui_median.version_IVF_10.currentText().split("  ")[0]
-            dict_IVF["11"] = 0 if self.ui_median.version_IVF_11.currentText() == "" else \
-                self.ui_median.version_IVF_11.currentText().split("  ")[0]
-            dict_IVF["12"] = 0 if self.ui_median.version_IVF_12.currentText() == "" else \
-                self.ui_median.version_IVF_12.currentText().split("  ")[0]
-            dict_IVF["13"] = 0 if self.ui_median.version_IVF_13.currentText() == "" else \
-                self.ui_median.version_IVF_13.currentText().split("  ")[0]
-            dict_BC = {}
-            dict_BC["1"] = 0 if self.ui_median.version_BC_1.currentText() == "" else \
-                self.ui_median.version_BC_1.currentText().split("  ")[0]
-            dict_BC["2"] = 0 if self.ui_median.version_BC_2.currentText() == "" else \
-                self.ui_median.version_BC_2.currentText().split("  ")[0]
-            dict_BC["3"] = 0 if self.ui_median.version_BC_3.currentText() == "" else \
-                self.ui_median.version_BC_3.currentText().split("  ")[0]
-            dict_BC["4"] = 0 if self.ui_median.version_BC_4.currentText() == "" else \
-                self.ui_median.version_BC_4.currentText().split("  ")[0]
-            dict_BC["5"] = 0 if self.ui_median.version_BC_5.currentText() == "" else \
-                self.ui_median.version_BC_5.currentText().split("  ")[0]
-            dict_BC["6"] = 0 if self.ui_median.version_BC_6.currentText() == "" else \
-                self.ui_median.version_BC_6.currentText().split("  ")[0]
-            dict_BC["7"] = 0 if self.ui_median.version_BC_7.currentText() == "" else \
-                self.ui_median.version_BC_7.currentText().split("  ")[0]
-            dict_BC["8"] = 0 if self.ui_median.version_BC_8.currentText() == "" else \
-                self.ui_median.version_BC_8.currentText().split("  ")[0]
-            dict_BC["9"] = 0 if self.ui_median.version_BC_9.currentText() == "" else \
-                self.ui_median.version_BC_9.currentText().split("  ")[0]
-            dict_BC["10"] = 0 if self.ui_median.version_BC_10.currentText() == "" else \
-                self.ui_median.version_BC_10.currentText().split("  ")[0]
-            dict_BC["11"] = 0 if self.ui_median.version_BC_11.currentText() == "" else \
-                self.ui_median.version_BC_11.currentText().split("  ")[0]
-            dict_BC["12"] = 0 if self.ui_median.version_BC_12.currentText() == "" else \
-                self.ui_median.version_BC_12.currentText().split("  ")[0]
-            dict_BC["13"] = 0 if self.ui_median.version_BC_13.currentText() == "" else \
-                self.ui_median.version_BC_13.currentText().split("  ")[0]
-            self.median_config = {"1": dict_LMP, "2": dict_BPD, "3": dict_CRL, "4": dict_IVF, "5": dict_BC}
             logger.info("选择的标记物版本设置 = %s" % self.median_config)
             self.main_median_flag = True
         else:
-            self.median_config = {}
             self.main_median_flag = False
-            logger.info("选择的标记物版本设置 = %s" % self.median_config)
+            logger.info("选择的标记物版本未设置")
 
     # 保存选择好的体重校正参数
     def get_weight_config(self):
+        AFP1 = [self.ui_weight.tableWidget.item(1, 1).text(), self.ui_weight.tableWidget.item(1, 2).text(), self.ui_weight.tableWidget.item(1, 3).text(), self.ui_weight.tableWidget.item(1, 4).text(), self.ui_weight.tableWidget.item(1, 5).text()]
+        hCG1 = [self.ui_weight.tableWidget.item(2, 1).text(), self.ui_weight.tableWidget.item(2, 2).text(), self.ui_weight.tableWidget.item(2, 3).text(), self.ui_weight.tableWidget.item(2, 4).text(), self.ui_weight.tableWidget.item(2, 5).text()]
+        fbhCG1 = [self.ui_weight.tableWidget.item(3, 1).text(), self.ui_weight.tableWidget.item(3, 2).text(), self.ui_weight.tableWidget.item(3, 3).text(), self.ui_weight.tableWidget.item(3, 4).text(), self.ui_weight.tableWidget.item(3, 5).text()]
+        uE31 = [self.ui_weight.tableWidget.item(4, 1).text(), self.ui_weight.tableWidget.item(4, 2).text(), self.ui_weight.tableWidget.item(4, 3).text(), self.ui_weight.tableWidget.item(4, 4).text(), self.ui_weight.tableWidget.item(4, 5).text()]
+        InhA1 = [self.ui_weight.tableWidget.item(5, 1).text(), self.ui_weight.tableWidget.item(5, 2).text(), self.ui_weight.tableWidget.item(5, 3).text(), self.ui_weight.tableWidget.item(5, 4).text(), self.ui_weight.tableWidget.item(5, 5).text()]
+        PAPPA1 = [self.ui_weight.tableWidget.item(6, 1).text(), self.ui_weight.tableWidget.item(6, 2).text(), self.ui_weight.tableWidget.item(6, 3).text(), self.ui_weight.tableWidget.item(6, 4).text(), self.ui_weight.tableWidget.item(6, 5).text()]
+        AFP2 = [self.ui_weight.tableWidget.item(7, 1).text(), self.ui_weight.tableWidget.item(7, 2).text(), self.ui_weight.tableWidget.item(7, 3).text(), self.ui_weight.tableWidget.item(7, 4).text(), self.ui_weight.tableWidget.item(7, 5).text()]
+        hCG2 = [self.ui_weight.tableWidget.item(8, 1).text(), self.ui_weight.tableWidget.item(8, 2).text(), self.ui_weight.tableWidget.item(8, 3).text(), self.ui_weight.tableWidget.item(8, 4).text(), self.ui_weight.tableWidget.item(8, 5).text()]
+        fbhCG2 = [self.ui_weight.tableWidget.item(9, 1).text(), self.ui_weight.tableWidget.item(9, 2).text(), self.ui_weight.tableWidget.item(9, 3).text(), self.ui_weight.tableWidget.item(9, 4).text(), self.ui_weight.tableWidget.item(9, 5).text()]
+        uE32 = [self.ui_weight.tableWidget.item(10, 1).text(), self.ui_weight.tableWidget.item(10, 2).text(), self.ui_weight.tableWidget.item(10, 3).text(), self.ui_weight.tableWidget.item(10, 4).text(), self.ui_weight.tableWidget.item(10, 5).text()]
+        InhA2 = [self.ui_weight.tableWidget.item(11, 1).text(), self.ui_weight.tableWidget.item(11, 2).text(), self.ui_weight.tableWidget.item(11, 3).text(), self.ui_weight.tableWidget.item(11, 4).text(), self.ui_weight.tableWidget.item(11, 5).text()]
+        PAPPA2 = [self.ui_weight.tableWidget.item(12, 1).text(), self.ui_weight.tableWidget.item(12, 2).text(), self.ui_weight.tableWidget.item(12, 3).text(), self.ui_weight.tableWidget.item(12, 4).text(), self.ui_weight.tableWidget.item(12, 5).text()]
+        self.weight_config = {"AFP1": AFP1, "hCG1": hCG1, "fbhCG1": fbhCG1, "uE31": uE31, "InhA1": InhA1, "PAPPA1": PAPPA1, "AFP2": AFP2, "hCG2": hCG2, "fbhCG2": fbhCG2, "uE32": uE32, "InhA2": InhA2, "PAPPA2": PAPPA2}
         if self.checkBox_weight.isChecked():
-            AFP1 = [self.ui_weight.AFP1.currentText(), self.ui_weight.tableWidget.item(1, 2).text(), self.ui_weight.tableWidget.item(1, 3).text(), self.ui_weight.tableWidget.item(1, 4).text(), self.ui_weight.tableWidget.item(1, 5).text()]
-            hCG1 = [self.ui_weight.hCG1.currentText(), self.ui_weight.tableWidget.item(2, 2).text(), self.ui_weight.tableWidget.item(2, 3).text(), self.ui_weight.tableWidget.item(2, 4).text(), self.ui_weight.tableWidget.item(2, 5).text()]
-            fbhCG1 = [self.ui_weight.fbhCG1.currentText(), self.ui_weight.tableWidget.item(3, 2).text(), self.ui_weight.tableWidget.item(3, 3).text(), self.ui_weight.tableWidget.item(3, 4).text(), self.ui_weight.tableWidget.item(3, 5).text()]
-            uE31 = [self.ui_weight.uE31.currentText(), self.ui_weight.tableWidget.item(4, 2).text(), self.ui_weight.tableWidget.item(4, 3).text(), self.ui_weight.tableWidget.item(4, 4).text(), self.ui_weight.tableWidget.item(4, 5).text()]
-            InhA1 = [self.ui_weight.InhA1.currentText(), self.ui_weight.tableWidget.item(5, 2).text(), self.ui_weight.tableWidget.item(5, 3).text(), self.ui_weight.tableWidget.item(5, 4).text(), self.ui_weight.tableWidget.item(5, 5).text()]
-            PAPPA1 = [self.ui_weight.PAPPA1.currentText(), self.ui_weight.tableWidget.item(6, 2).text(), self.ui_weight.tableWidget.item(6, 3).text(), self.ui_weight.tableWidget.item(6, 4).text(), self.ui_weight.tableWidget.item(6, 5).text()]
-            AFP2 = [self.ui_weight.AFP2.currentText(), self.ui_weight.tableWidget.item(7, 2).text(), self.ui_weight.tableWidget.item(7, 3).text(), self.ui_weight.tableWidget.item(7, 4).text(), self.ui_weight.tableWidget.item(7, 5).text()]
-            hCG2 = [self.ui_weight.hCG2.currentText(), self.ui_weight.tableWidget.item(8, 2).text(), self.ui_weight.tableWidget.item(8, 3).text(), self.ui_weight.tableWidget.item(8, 4).text(), self.ui_weight.tableWidget.item(8, 5).text()]
-            fbhCG2 = [self.ui_weight.fbhCG2.currentText(), self.ui_weight.tableWidget.item(9, 2).text(), self.ui_weight.tableWidget.item(9, 3).text(), self.ui_weight.tableWidget.item(9, 4).text(), self.ui_weight.tableWidget.item(9, 5).text()]
-            uE32 = [self.ui_weight.uE32.currentText(), self.ui_weight.tableWidget.item(10, 2).text(), self.ui_weight.tableWidget.item(10, 3).text(), self.ui_weight.tableWidget.item(10, 4).text(), self.ui_weight.tableWidget.item(10, 5).text()]
-            InhA2 = [self.ui_weight.InhA2.currentText(), self.ui_weight.tableWidget.item(11, 2).text(), self.ui_weight.tableWidget.item(11, 3).text(), self.ui_weight.tableWidget.item(11, 4).text(), self.ui_weight.tableWidget.item(11, 5).text()]
-            PAPPA2 = [self.ui_weight.PAPPA2.currentText(), self.ui_weight.tableWidget.item(12, 2).text(), self.ui_weight.tableWidget.item(12, 3).text(), self.ui_weight.tableWidget.item(12, 4).text(), self.ui_weight.tableWidget.item(12, 5).text()]
-            self.weight_config = {"AFP1": AFP1, "hCG1": hCG1, "fbhCG1": fbhCG1, "uE31": uE31, "InhA1": InhA1, "PAPPA1": PAPPA1, "AFP2": AFP2, "hCG2": hCG2, "fbhCG2": fbhCG2, "uE32": uE32, "InhA2": InhA2, "PAPPA2": PAPPA2}
             self.main_weight_flag = True
             logger.info("体重矫正参数设置 = %s" % self.weight_config)
         else:
-            self.weight_config = {}
             self.main_weight_flag = False
-            logger.info("体重矫正参数设置 = %s" % self.weight_config)
+            logger.info("体重矫正参数设置未设置")
 
     # 打开中位数设置窗口
     def show_median(self):
@@ -699,6 +691,7 @@ class UiMainWindow(QMainWindow):
             self.ui_weight.setWindowModality(Qt.ApplicationModal)
             self.ui_weight.exec_()
 
+    # 打开多线程设置界面
     def show_multithreading(self):
         self.ui_multithreading.setWindowModality(Qt.ApplicationModal)
         self.ui_multithreading.exec_()

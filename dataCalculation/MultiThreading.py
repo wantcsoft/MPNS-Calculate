@@ -51,10 +51,13 @@ class MultiThreading(threading.Thread):
         queue = Queue()
         CalculateThreading.CalculateThreading.data_list = self.data_list
         CalculateThreading.CalculateThreading.median_config = self.main_windows.median_config
+        CalculateThreading.CalculateThreading.weight_config = self.main_windows.weight_config
         CalculateThreading.CalculateThreading.connect = self.main_windows.connect
         threading_num = self.main_windows.ui_multithreading.num
         for i in range(0, threading_num):
-            thread = CalculateThreading.CalculateThreading(self.dll_list[i], self.config_ini_list[i], lock, queue)
+            thread = CalculateThreading.CalculateThreading(self.dll_list[i], self.config_ini_list[i], lock, queue,
+                                                           self.main_windows.main_median_flag,
+                                                           self.main_windows.main_weight_flag)
             thread.start()
 
         self.end_time(queue)

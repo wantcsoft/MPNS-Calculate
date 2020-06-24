@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pyodbc
 
 
@@ -53,8 +55,8 @@ class QueryData(object):
 
     # 根据审核状态查询关键字段（与日期无关）
     def query_workflow(self, verify_workflow):
-        sql = """select CheckNo, SolutionRiskSerialID, 
-			EarlySampleSerialID, MiddleSampleSerialID,
+        sql = """select CheckNo, SolutionRiskSerialID, PatientSerialID,
+			EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
 			GestationWeek_E, GestationWeek_M,
 			GestationDay_E, GestationDay_M,
 			GestationType_E, GestationType_M
@@ -96,8 +98,8 @@ class QueryData(object):
 
     # 通过时间还有筛查流程状态查询出有两次检查的人的数据（测试日期只需要有一个在日期范围内）
     def query_time_workflow_any(self, start, end, verify_workflow):
-        sql = """select CheckNo, SolutionRiskSerialID, 
-						EarlySampleSerialID, MiddleSampleSerialID,
+        sql = """select CheckNo, SolutionRiskSerialID, PatientSerialID,
+						EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
 						GestationWeek_E, GestationWeek_M,
 						GestationDay_E, GestationDay_M,
 						GestationType_E, GestationType_M
@@ -108,8 +110,8 @@ class QueryData(object):
 						(TestDate_E between '%s' and '%s' 
 						or TestDate_M between '%s' and '%s')
 		union
-				select CheckNo, SolutionRiskSerialID, 
-					EarlySampleSerialID, MiddleSampleSerialID,
+				select CheckNo, SolutionRiskSerialID, PatientSerialID,
+					EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
 					GestationWeek_E, GestationWeek_M,
 					GestationDay_E, GestationDay_M,
 					GestationType_E, GestationType_M
@@ -123,8 +125,8 @@ class QueryData(object):
 
     # 通过时间还有筛查流程状态查询出有两次检查的人的数据（早期和中期测试日期必须都在日期范围内）
     def query_time_workflow_all(self, start, end, verify_workflow):
-        sql = """select CheckNo, SolutionRiskSerialID, 
-						EarlySampleSerialID, MiddleSampleSerialID,
+        sql = """select CheckNo, SolutionRiskSerialID, PatientSerialID,
+						EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
 						GestationWeek_E, GestationWeek_M,
 						GestationDay_E, GestationDay_M,
 						GestationType_E, GestationType_M
@@ -135,8 +137,8 @@ class QueryData(object):
 						(TestDate_E between '%s' and '%s' 
 						and TestDate_M between '%s' and '%s')
 		union
-				select CheckNo, SolutionRiskSerialID, 
-					EarlySampleSerialID, MiddleSampleSerialID,
+				select CheckNo, SolutionRiskSerialID, PatientSerialID,
+					EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
 					GestationWeek_E, GestationWeek_M,
 					GestationDay_E, GestationDay_M,
 					GestationType_E, GestationType_M
@@ -281,7 +283,7 @@ class QueryData(object):
 				where SolutionRiskSerialID = %s""" % (solutionRiskSerialID)
         return self.cursor.execute(sql).fetchall()
 
-    # 查询A体重校正参数
+    # 查询体重校正参数
     def query_weight_parameters(self):
         sql = """SELECT ParameterStr, ParameterValue, PVerNo, PVerDate, UseNumber, Description
                  FROM BSC_DS_Parameter
@@ -289,6 +291,66 @@ class QueryData(object):
                  OR (ParameterStr LIKE '%weighttype%') 
                  AND (ParameterStr NOT LIKE '%WeightCorrection%') 
                  AND (ParameterStr NOT LIKE '%TemplateForDowns_NT_Earlyweight%') """
+        return self.cursor.execute(sql).fetchall()
+
+
+
+# 当数据库中没有拼串时
+    # 查询筛查方案
+    def query_screening_plan(self, solutionRiskSerialID):
+        sql = """select SolutionTypeID
+                 from WOR_DS_SolutionRiskInfo
+                 where SolutionRiskSerialID = '%s'""" % solutionRiskSerialID
+        return self.cursor.execute(sql).fetchall()
+
+    # 查询第一段拼串缺少的值
+    def no_query_r11(self, solutionRiskSerialID):
+        sql = """select TestItems, DownsCritical, 
+                        TrisomyCritical, ONTDCritical,
+                        ONTDCriticalType, PatuaCritical,
+		                USELimit, USETwoTrisomyRisk
+                 from BSC_DS_Solution
+                 where SolutionID = (select SolutionID 
+					                 from WOR_DS_SolutionRiskInfo
+					                 where SolutionRiskSerialID = '%s')""" % solutionRiskSerialID
+        return self.cursor.execute(sql).fetchall()
+
+    # 查询孕妇的肤色
+    def query_people_color(self, patientSerialID):
+        sql = """select RaceType 
+                 from WOR_DS_PatientInfo
+                 where PatientSerialID = %s""" % patientSerialID
+        return self.cursor.execute(sql).fetchall()
+
+    # 查询预产期年龄
+    def query_premature_age(self, sampleSerialID):
+        sql = """select ChildBirthDateAge, Weight, SamplingDate,
+                 GestationWeek, GestationDay
+                 from WOR_DS_SampleInfo
+                 where SampleSerialID = %s """ % sampleSerialID
+        return self.cursor.execute(sql).fetchall()
+
+    # 查询r16从31到36
+    def query_r16_31_36(self, pregnantSerialID):
+        sql = """select Diabetes, FetalNumber, IVF, SmokeHistory, DownsHistory
+                 from WOR_DS_PregnantInfo
+                 where PregnantSerialID = %s""" % pregnantSerialID
+        return self.cursor.execute(sql).fetchall()
+
+    # 查询CRL日孕周
+    def query_CRL_weekday(self, sampleSerialID, CheckTypeID):
+        sql = """select CheckDate
+                 from WOR_DS_CheckGestationInfo
+                 where SampleSerialID = '%s'
+                 and CheckTypeID = '%s'""" % (sampleSerialID, CheckTypeID)
+        return self.cursor.execute(sql).fetchall()
+
+    # 获取标记物测量值
+    def query_item_value(self, sampleSerialID, testItem):
+        sql = """select Result
+        		from WOR_DS_TestInfo 
+        		WHERE SampleSerialID = %d
+        		and TestItemID = % s""" % (sampleSerialID, testItem)
         return self.cursor.execute(sql).fetchall()
 
 # 当标记物为7号时，
@@ -299,7 +361,10 @@ class QueryData(object):
 
 if __name__ == "__main__":
     con = QueryData()
-    print(con.connect("{SQL Server}", "DESKTOP-SM51UF2\\MOZZIE", "Mozzie", "john", "1234"))
+    con.connect("{SQL Server}", "DESKTOP-SM51UF2\\MOZZIE", "Mozzie", "john", "1234")
+
+    test = datetime.date(con.query_premature_age(24)[0].TestDate).day
+    con.query_CRL_weekday(24, 2)[0].CheckDate
 
 #
 # list = con.master_version_query()
