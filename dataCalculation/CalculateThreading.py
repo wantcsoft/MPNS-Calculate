@@ -8,7 +8,7 @@ logger = LoggerFile.MyLog()
 
 
 class CalculateThreading(Thread):
-    data_list = {}
+    data_list = []
     median_config = {}
     weight_config = {}
 
@@ -347,10 +347,12 @@ class CalculateThreading(Thread):
         # 给拼串的数组中所有的标记物绑定新的中位数值
         for i in self.median_list:
             if i == "16":
-                r16[40] = format(self.median_list.get(i)[0][0], '.2f')
+                point_num = self.connect.query_median_points(i)[0].DefaultMedianDecimal
+                r16[40] = format(self.median_list.get(i)[0][0], '.%sf' % point_num)
             else:
                 if self.median_list.get(i)[0] is not None and self.median_list.get(i)[0][0] is not None:
-                    r16[self.convert_item(i) + 13] = format(self.median_list.get(i)[0][0], '.2f')
+                    point_num = self.connect.query_median_points(i)[0].DefaultMedianDecimal
+                    r16[self.convert_item(i) + 13] = format(self.median_list.get(i)[0][0], '.%sf' % point_num)
                 else:
                     logger.error("标记物%s，%s版本没有中位数值, solution_risk_serialID = %s, CheckNo = %s" %
                                   (i, self.median_list.get(i)[0].MedianVerNo, data.SolutionRiskSerialID, self.checkNo))

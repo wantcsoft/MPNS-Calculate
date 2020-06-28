@@ -353,6 +353,13 @@ class QueryData(object):
         		and TestItemID = % s""" % (sampleSerialID, testItem)
         return self.cursor.execute(sql).fetchall()
 
+    # 获取中位数小数位数
+    def query_median_points(self, testItem):
+        sql = """SELECT DefaultMedianDecimal
+                 FROM BSC_TestItem
+                 where TestItemID = %s""" % testItem
+        return self.cursor.execute(sql).fetchall()
+
 # 当标记物为7号时，
 
 

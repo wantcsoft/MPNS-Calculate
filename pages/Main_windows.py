@@ -51,6 +51,7 @@ class UiMainWindow(QMainWindow):
         self.lable_spend_time_setting()
         self.time_setting()
         self.calculate_button_setting()
+        self.counts_button_setting()
         self.check_error_button_setting()
         self.multithreading_button_setting()
         self.progressBar_setting()
@@ -77,6 +78,8 @@ class UiMainWindow(QMainWindow):
         self.median_setting.setText("中位数设置")
         self.weight_setting.setText("体重校正参数设置")
         self.multithreading_setting.setText("多线程设置")
+        self.calculate.setText("开始计算")
+        self.count_number.setText("测试计算数量")
         # 中位数配置启用
         self.checkBox_median.setText("启用中位数")
         self.checkBox_weight.setText("启用体重校正参数")
@@ -90,11 +93,10 @@ class UiMainWindow(QMainWindow):
         self.to_check.setText("已提交审核，待审核")
         self.have_check.setText("已审核通过")
 
-        self.calculate.setText("开始计算")
         self.check_error.setText("查看")
-        self.lable_total.setText("筛查方案数量：0例")
+        self.lable_total.setText("筛查方案数量：0 例")
         self.progressBar.setText("计算进度：还剩 0 例")
-        self.lable_exception.setText("异常数量：0例")
+        self.lable_exception.setText("异常数量：0 例")
         self.lable_start_time.setText("计算开始时间：")
         self.lable_complete_time.setText("预估完成时间：")
         self.lable_left_time.setText("剩余时间：")
@@ -126,7 +128,7 @@ class UiMainWindow(QMainWindow):
     # 数据库连接信息
     def database_prompt_setting(self):
         self.database_prompt = QtWidgets.QLabel(self.centralwidget)
-        self.database_prompt.setGeometry(QtCore.QRect(130, 150, 180, 50))
+        self.database_prompt.setGeometry(QtCore.QRect(100, 150, 180, 50))
         font = QtGui.QFont()
         font.setPointSize(9)
         self.database_prompt.setFont(font)
@@ -161,6 +163,14 @@ class UiMainWindow(QMainWindow):
         self.calculate.setGeometry(QtCore.QRect(900, 100, 180, 50))
         self.calculate.setObjectName("calculate")
         self.calculate.clicked.connect(self.calculate_start)
+
+    # 测试计算数量按钮
+    def counts_button_setting(self):
+        # 测试数量按钮
+        self.count_number = QtWidgets.QPushButton(self.centralwidget)
+        self.count_number.setGeometry(QtCore.QRect(900, 160, 180, 50))
+        self.count_number.setObjectName("calculate")
+        self.count_number.clicked.connect(self.count_number_settint)
 
     # 中位数配置启用按钮
     def enable_median_setting(self):
@@ -199,10 +209,10 @@ class UiMainWindow(QMainWindow):
         self.title.setFont(font)
         self.title.setObjectName("title")
 
-    # 一筛查流程状态选择
+    # 筛查流程状态选择
     def label_workflow_sign_setting(self):
         self.label_workflow_sign = QtWidgets.QLabel(self.centralwidget)
-        self.label_workflow_sign.setGeometry(QtCore.QRect(600, 170, 300, 80))
+        self.label_workflow_sign.setGeometry(QtCore.QRect(500, 170, 300, 80))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label_workflow_sign.setFont(font)
@@ -230,7 +240,7 @@ class UiMainWindow(QMainWindow):
         # 设置工作流程的位置
         # 工作流状态
         self.no_risk = QtWidgets.QCheckBox(self.centralwidget)
-        self.no_risk.setGeometry(QtCore.QRect(600, 230, 300, 30))
+        self.no_risk.setGeometry(QtCore.QRect(500, 230, 300, 30))
         self.no_risk.setObjectName("no_risk")
         self.no_risk.click()
         font = QtGui.QFont()
@@ -238,7 +248,7 @@ class UiMainWindow(QMainWindow):
         self.no_risk.setFont(font)
 
         self.have_risk = QtWidgets.QCheckBox(self.centralwidget)
-        self.have_risk.setGeometry(QtCore.QRect(600, 270, 300, 30))
+        self.have_risk.setGeometry(QtCore.QRect(500, 270, 300, 30))
         self.have_risk.setObjectName("have_risk")
         self.have_risk.click()
         font = QtGui.QFont()
@@ -246,7 +256,7 @@ class UiMainWindow(QMainWindow):
         self.have_risk.setFont(font)
 
         self.to_check = QtWidgets.QCheckBox(self.centralwidget)
-        self.to_check.setGeometry(QtCore.QRect(600, 310, 300, 30))
+        self.to_check.setGeometry(QtCore.QRect(500, 310, 300, 30))
         self.to_check.setObjectName("to_check")
         self.to_check.click()
         font = QtGui.QFont()
@@ -254,7 +264,7 @@ class UiMainWindow(QMainWindow):
         self.to_check.setFont(font)
 
         self.have_check = QtWidgets.QCheckBox(self.centralwidget)
-        self.have_check.setGeometry(QtCore.QRect(600, 350, 300, 30))
+        self.have_check.setGeometry(QtCore.QRect(500, 350, 300, 30))
         self.have_check.setObjectName("have_check")
         self.have_check.click()
         font = QtGui.QFont()
@@ -319,7 +329,7 @@ class UiMainWindow(QMainWindow):
     def lable_start_time_setting(self):
         # 筛选数据总数量
         self.lable_start_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_start_time.setGeometry(QtCore.QRect(600, 370, 400, 60))
+        self.lable_start_time.setGeometry(QtCore.QRect(500, 370, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_start_time.setFont(font)
@@ -329,7 +339,7 @@ class UiMainWindow(QMainWindow):
     def lable_complete_time_setting(self):
         # 筛选数据总数量
         self.lable_complete_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_complete_time.setGeometry(QtCore.QRect(600, 410, 400, 60))
+        self.lable_complete_time.setGeometry(QtCore.QRect(500, 410, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_complete_time.setFont(font)
@@ -338,7 +348,7 @@ class UiMainWindow(QMainWindow):
     # 计算剩余时间
     def lable_left_time_setting(self):
         self.lable_left_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_left_time.setGeometry(QtCore.QRect(600, 450, 400, 60))
+        self.lable_left_time.setGeometry(QtCore.QRect(500, 450, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_left_time.setFont(font)
@@ -347,7 +357,7 @@ class UiMainWindow(QMainWindow):
     # 总共花费时间时间
     def lable_spend_time_setting(self):
         self.lable_spend_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_spend_time.setGeometry(QtCore.QRect(600, 490, 400, 60))
+        self.lable_spend_time.setGeometry(QtCore.QRect(500, 490, 400, 60))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_spend_time.setFont(font)
@@ -378,10 +388,8 @@ class UiMainWindow(QMainWindow):
         file_path = LoggerFile.error_path
         os.startfile(file_path)
 
-    # 计算按钮点击之后
-    def calculate_start(self):
-        self.calculate_sucess.hide()
-        self.progressBar.setProperty("value", 0)
+    # 点击测试计算数量按钮之后
+    def count_number_settint(self):
         if not self.main_database_connect_flag:
             self.ui_warning_database.setWindowModality(Qt.ApplicationModal)
             self.ui_warning_database.exec_()
@@ -389,69 +397,106 @@ class UiMainWindow(QMainWindow):
             self.ui_warning_median.setWindowModality(Qt.ApplicationModal)
             self.ui_warning_median.exec_()
         else:
-            # 设置任务开始时间
             verify_workflow = self.get_workflow_state()
-            if self.dateEdit.date() == self.dateEdit_2.date():
-                count = self.connect.query_workflow_count(verify_workflow.__str__())[0][0]
-                self.lable_total.setText("筛查方案数量：%s" % count)
-                if count > 0:
+            if self.dateEdit_2.date() > self.dateEdit.date():
+                end = self.dateEdit_2.date().getDate()
+                start = self.dateEdit.date().getDate()
+            else:
+                start = self.dateEdit_2.date().getDate()
+                end = self.dateEdit.date().getDate()
+            start_time = "%d-%d-%d 00:00:00" % (start[0], start[1], start[2])
+            end_time = "%d-%d-%d 23:59:59" % (end[0], end[1], end[2])
+            # 两个都在日期范围内
+            if self.radioButton.isChecked():
+                count_one = self.connect.query_one_time_workflow_count(start_time,
+                                                                       end_time,
+                                                                       verify_workflow.__str__())[0][0]
+                count_two = self.connect.query_two_time_workflow_all_count(start_time,
+                                                                           end_time,
+                                                                           verify_workflow.__str__())[0][0]
+                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
+            # 只需要一个在范围内
+            else:
+                count_one = self.connect.query_one_time_workflow_count(start_time,
+                                                                       end_time,
+                                                                       verify_workflow.__str__())[0][0]
+                count_two = self.connect.query_two_time_workflow_any_count(start_time,
+                                                                           end_time,
+                                                                           verify_workflow.__str__())[0][0]
+                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
+
+    # 计算按钮点击之后
+    def calculate_start(self):
+        self.calculate_sucess.hide()
+        if not self.main_database_connect_flag:
+            self.ui_warning_database.setWindowModality(Qt.ApplicationModal)
+            self.ui_warning_database.exec_()
+        elif not self.main_median_flag and not self.main_weight_flag:
+            self.ui_warning_median.setWindowModality(Qt.ApplicationModal)
+            self.ui_warning_median.exec_()
+        else:
+            verify_workflow = self.get_workflow_state()
+            # if self.dateEdit.date() == self.dateEdit_2.date():
+            #     count = self.connect.query_workflow_count(verify_workflow.__str__())[0][0]
+            #     self.lable_total.setText("筛查方案数量：%s" % count)
+            #     if count > 0:
+            #         # 开始计算时其他控件无法使用
+            #         self.setEnabled(False)
+            #         self.lable_start_time.setText("计算开始时间：%s" %
+            #                                       time.strftime('%Y-%m-%d %H:%M:%S',
+            #                                                     time.localtime(time.time())))
+            #         data_list = self.connect.query_workflow(verify_workflow.__str__())
+            #         thread = MultiThreading.MultiThreading(self, data_list, count)
+            #         thread.start()
+            # else:
+            if self.dateEdit_2.date() > self.dateEdit.date():
+                end = self.dateEdit_2.date().getDate()
+                start = self.dateEdit.date().getDate()
+            else:
+                start = self.dateEdit_2.date().getDate()
+                end = self.dateEdit.date().getDate()
+            start_time = "%d-%d-%d 00:00:00" % (start[0], start[1], start[2])
+            end_time = "%d-%d-%d 23:59:59" % (end[0], end[1], end[2])
+            # 两个都在日期范围内
+            if self.radioButton.isChecked():
+                count_one = self.connect.query_one_time_workflow_count(start_time,
+                                                                       end_time,
+                                                                       verify_workflow.__str__())[0][0]
+                count_two = self.connect.query_two_time_workflow_all_count(start_time,
+                                                                           end_time,
+                                                                           verify_workflow.__str__())[0][0]
+                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
+                if (count_one + count_two) > 0:
                     # 开始计算时其他控件无法使用
                     self.setEnabled(False)
                     self.lable_start_time.setText("计算开始时间：%s" %
                                                   time.strftime('%Y-%m-%d %H:%M:%S',
                                                                 time.localtime(time.time())))
-                    data_list = self.connect.query_workflow(verify_workflow.__str__())
-                    thread = MultiThreading.MultiThreading(self, data_list, count)
+                    data_list = self.connect.query_time_workflow_all(start_time,
+                                                                     end_time,
+                                                                     verify_workflow.__str__())
+                    thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
                     thread.start()
+            # 只需要一个在范围内
             else:
-                if self.dateEdit_2.date() > self.dateEdit.date():
-                    end = self.dateEdit_2.date().getDate()
-                    start = self.dateEdit.date().getDate()
-                else:
-                    start = self.dateEdit_2.date().getDate()
-                    end = self.dateEdit.date().getDate()
-                start_time = "%d-%d-%d 00:00:00" % (start[0], start[1], start[2])
-                end_time = "%d-%d-%d 00:00:00" % (end[0], end[1], end[2])
-                # 两个都在日期范围内
-                if self.radioButton.isChecked():
-                    count_one = self.connect.query_one_time_workflow_count(start_time,
+                count_one = self.connect.query_one_time_workflow_count(start_time,
+                                                                       end_time,
+                                                                       verify_workflow.__str__())[0][0]
+                count_two = self.connect.query_two_time_workflow_any_count(start_time,
                                                                            end_time,
                                                                            verify_workflow.__str__())[0][0]
-                    count_two = self.connect.query_two_time_workflow_all_count(start_time,
-                                                                               end_time,
-                                                                               verify_workflow.__str__())[0][0]
-                    self.lable_total.setText("筛查方案数量：%s" % (count_one + count_two))
-                    if (count_one + count_two) > 0:
-                        # 开始计算时其他控件无法使用
-                        self.setEnabled(False)
-                        self.lable_start_time.setText("计算开始时间：%s" %
-                                                      time.strftime('%Y-%m-%d %H:%M:%S',
-                                                                    time.localtime(time.time())))
-                        data_list = self.connect.query_time_workflow_all(start_time,
-                                                                         end_time,
-                                                                         verify_workflow.__str__())
-                        thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
-                        thread.start()
-                # 只需要一个在范围内
-                else:
-                    count_one = self.connect.query_one_time_workflow_count(start_time,
-                                                                           end_time,
-                                                                           verify_workflow.__str__())[0][0]
-                    count_two = self.connect.query_two_time_workflow_any_count(start_time,
-                                                                               end_time,
-                                                                               verify_workflow.__str__())[0][0]
-                    self.lable_total.setText("筛查方案数量：%s" % (count_one + count_two))
-                    if (count_one + count_two) > 0:
-                        # 开始计算时其他控件无法使用
-                        self.setEnabled(False)
-                        self.lable_start_time.setText("计算开始时间：%s" %
-                                                      time.strftime('%Y-%m-%d %H:%M:%S',
-                                                                    time.localtime(time.time())))
-                        data_list = self.connect.query_time_workflow_any(start_time,
-                                                                         end_time,
-                                                                         verify_workflow.__str__())
-                        thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
-                        thread.start()
+                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
+                if (count_one + count_two) > 0:
+                    # 开始计算时其他控件无法使用
+                    self.setEnabled(False)
+                    self.lable_start_time.setText("计算开始时间：%s" %
+                                                  time.strftime('%Y-%m-%d %H:%M:%S',
+                                                                time.localtime(time.time())))
+                    data_list = self.connect.query_time_workflow_any(start_time,
+                                                                     end_time,
+                                                                     verify_workflow.__str__())
+                    thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
+                    thread.start()
 
     # 返回筛选流程的状态集合
     def get_workflow_state(self):
