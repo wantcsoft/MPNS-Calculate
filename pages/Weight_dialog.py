@@ -2,7 +2,8 @@
 import sys
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication
+from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
+import configparser
 
 
 class UiWeight(QDialog):
@@ -16,13 +17,16 @@ class UiWeight(QDialog):
         self.setWindowTitle("体重校正参数设置")
         self.prompt_message_setting()
         self.table_setting()
+        self.out_put_button()
+        self.in_put_button()
         # self.select_box_setting()
         self.connect = None
         QtCore.QMetaObject.connectSlotsByName(self)
 
+    # 最下边的计算公式
     def prompt_message_setting(self):
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self)
-        self.plainTextEdit.setGeometry(QtCore.QRect(30, 500, 780, 100))
+        self.plainTextEdit.setGeometry(QtCore.QRect(30, 500, 500, 100))
         self.plainTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.plainTextEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.plainTextEdit.setObjectName("plainTextEdit")
@@ -30,7 +34,9 @@ class UiWeight(QDialog):
                                         "2:mom=result/median/(A+B/weight)\n"
                                         "3:mom=result/median/10^(A*weight^2-B*weight+C)\n"
                                         "4:mom=result/median")
+        self.plainTextEdit.setEnabled(False)
 
+    # 表格的大小位置表头设置
     def table_setting(self):
         self.tableWidget = QtWidgets.QTableWidget(self)
         # self.tableWidget.setEnabled(False)
@@ -92,116 +98,7 @@ class UiWeight(QDialog):
         item.setText("PAPPA2")
         self.tableWidget.setSortingEnabled(__sortingEnabled)
 
-    # def select_box_setting(self):
-    #     self.AFP1 = QtWidgets.QComboBox(self)
-    #     self.AFP1.setGeometry(QtCore.QRect(160, 55, 100, 30))
-    #     self.AFP1.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                             "font: 12pt \"Arial\";")
-    #     self.AFP1.setObjectName("AFP1")
-    #     self.AFP1.addItem("1")
-    #     self.AFP1.addItem("2")
-    #     self.AFP1.addItem("3")
-    #     self.AFP1.addItem("4")
-    #     self.hCG1 = QtWidgets.QComboBox(self)
-    #     self.hCG1.setGeometry(QtCore.QRect(160, 90, 100, 30))
-    #     self.hCG1.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                             "font: 12pt \"Arial\";")
-    #     self.hCG1.setObjectName("hCG1")
-    #     self.hCG1.addItem("1")
-    #     self.hCG1.addItem("2")
-    #     self.hCG1.addItem("3")
-    #     self.hCG1.addItem("4")
-    #     self.fbhCG1 = QtWidgets.QComboBox(self)
-    #     self.fbhCG1.setGeometry(QtCore.QRect(160, 125, 100, 30))
-    #     self.fbhCG1.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                               "font: 12pt \"Arial\";")
-    #     self.fbhCG1.setObjectName("fbhCG1")
-    #     self.fbhCG1.addItem("1")
-    #     self.fbhCG1.addItem("2")
-    #     self.fbhCG1.addItem("3")
-    #     self.fbhCG1.addItem("4")
-    #     self.uE31 = QtWidgets.QComboBox(self)
-    #     self.uE31.setGeometry(QtCore.QRect(160, 160, 100, 30))
-    #     self.uE31.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                             "font: 12pt \"Arial\";")
-    #     self.uE31.setObjectName("uE31")
-    #     self.uE31.addItem("1")
-    #     self.uE31.addItem("2")
-    #     self.uE31.addItem("3")
-    #     self.uE31.addItem("4")
-    #     self.InhA1 = QtWidgets.QComboBox(self)
-    #     self.InhA1.setGeometry(QtCore.QRect(160, 195, 100, 30))
-    #     self.InhA1.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                              "font: 12pt \"Arial\";")
-    #     self.InhA1.setObjectName("InhA1")
-    #     self.InhA1.addItem("1")
-    #     self.InhA1.addItem("2")
-    #     self.InhA1.addItem("3")
-    #     self.InhA1.addItem("4")
-    #     self.PAPPA1 = QtWidgets.QComboBox(self)
-    #     self.PAPPA1.setGeometry(QtCore.QRect(160, 230, 100, 30))
-    #     self.PAPPA1.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                               "font: 12pt \"Arial\";")
-    #     self.PAPPA1.setObjectName("PAPPA1")
-    #     self.PAPPA1.addItem("1")
-    #     self.PAPPA1.addItem("2")
-    #     self.PAPPA1.addItem("3")
-    #     self.PAPPA1.addItem("4")
-    #     self.AFP2 = QtWidgets.QComboBox(self)
-    #     self.AFP2.setGeometry(QtCore.QRect(160, 265, 100, 30))
-    #     self.AFP2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                             "font: 12pt \"Arial\";")
-    #     self.AFP2.setObjectName("AFP2")
-    #     self.AFP2.addItem("1")
-    #     self.AFP2.addItem("2")
-    #     self.AFP2.addItem("3")
-    #     self.AFP2.addItem("4")
-    #     self.hCG2 = QtWidgets.QComboBox(self)
-    #     self.hCG2.setGeometry(QtCore.QRect(160, 300, 100, 30))
-    #     self.hCG2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                             "font: 12pt \"Arial\";")
-    #     self.hCG2.setObjectName("hCG2")
-    #     self.hCG2.addItem("1")
-    #     self.hCG2.addItem("2")
-    #     self.hCG2.addItem("3")
-    #     self.hCG2.addItem("4")
-    #     self.fbhCG2 = QtWidgets.QComboBox(self)
-    #     self.fbhCG2.setGeometry(QtCore.QRect(160, 335, 100, 30))
-    #     self.fbhCG2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                               "font: 12pt \"Arial\";")
-    #     self.fbhCG2.setObjectName("fbhCG2")
-    #     self.fbhCG2.addItem("1")
-    #     self.fbhCG2.addItem("2")
-    #     self.fbhCG2.addItem("3")
-    #     self.fbhCG2.addItem("4")
-    #     self.uE32 = QtWidgets.QComboBox(self)
-    #     self.uE32.setGeometry(QtCore.QRect(160, 370, 100, 30))
-    #     self.uE32.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                             "font: 12pt \"Arial\";")
-    #     self.uE32.setObjectName("uE32")
-    #     self.uE32.addItem("1")
-    #     self.uE32.addItem("2")
-    #     self.uE32.addItem("3")
-    #     self.uE32.addItem("4")
-    #     self.InhA2 = QtWidgets.QComboBox(self)
-    #     self.InhA2.setGeometry(QtCore.QRect(160, 405, 100, 30))
-    #     self.InhA2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                              "font: 12pt \"Arial\";")
-    #     self.InhA2.setObjectName("InhA2")
-    #     self.InhA2.addItem("1")
-    #     self.InhA2.addItem("2")
-    #     self.InhA2.addItem("3")
-    #     self.InhA2.addItem("4")
-    #     self.PAPPA2 = QtWidgets.QComboBox(self)
-    #     self.PAPPA2.setGeometry(QtCore.QRect(160, 440, 100, 30))
-    #     self.PAPPA2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-    #                               "font: 12pt \"Arial\";")
-    #     self.PAPPA2.setObjectName("PAPPA2")
-    #     self.PAPPA2.addItem("1")
-    #     self.PAPPA2.addItem("2")
-    #     self.PAPPA2.addItem("3")
-    #     self.PAPPA2.addItem("4")
-
+    # 表格的数据填充
     def data_padding_setting(self):
         data = self.connect.query_weight_parameters()
         for i in data:
@@ -473,10 +370,229 @@ class UiWeight(QDialog):
                 # self.PAPPA2.setCurrentIndex(int(i[1])-1)
                 continue
 
+    # 导出体重校正参数设置
+    def out_put_button(self):
+        self.out_button = QtWidgets.QPushButton(self)
+        self.out_button.setGeometry(QtCore.QRect(555, 520, 100, 50))
+        self.out_button.setObjectName("out_button")
+        self.out_button.setText("导出")
+        self.out_button.clicked.connect(self.out_put_setting)
+
+    # 导入体重校正参数设置
+    def in_put_button(self):
+        self.in_button = QtWidgets.QPushButton(self)
+        self.in_button.setGeometry(QtCore.QRect(690, 520, 100, 50))
+        self.in_button.setObjectName("in_button")
+        self.in_button.setText("导入")
+        self.in_button.clicked.connect(self.in_put_setting)
+
+    # 当点击导出按钮之后
+    def out_put_setting(self):
+        fileName, fileType = QFileDialog.getSaveFileName(None, "文件保存", "D:/", "Text Files (*.ini);")
+        config = configparser.ConfigParser()
+        config['AFP1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(1, 2).text(),
+                          'B': self.tableWidget.item(1, 3).text(),
+                          'C': self.tableWidget.item(1, 4).text(),
+                          'D': self.tableWidget.item(1, 5).text()}
+        config['hCG1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(2, 2).text(),
+                          'B': self.tableWidget.item(2, 3).text(),
+                          'C': self.tableWidget.item(2, 4).text(),
+                          'D': self.tableWidget.item(2, 5).text()}
+        config['fbhCG1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(3, 2).text(),
+                          'B': self.tableWidget.item(3, 3).text(),
+                          'C': self.tableWidget.item(3, 4).text(),
+                          'D': self.tableWidget.item(3, 5).text()}
+        config['uE31'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(4, 2).text(),
+                          'B': self.tableWidget.item(4, 3).text(),
+                          'C': self.tableWidget.item(4, 4).text(),
+                          'D': self.tableWidget.item(4, 5).text()}
+        config['InhA1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(5, 2).text(),
+                          'B': self.tableWidget.item(5, 3).text(),
+                          'C': self.tableWidget.item(5, 4).text(),
+                          'D': self.tableWidget.item(5, 5).text()}
+        config['PAPPA1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(6, 2).text(),
+                          'B': self.tableWidget.item(6, 3).text(),
+                          'C': self.tableWidget.item(6, 4).text(),
+                          'D': self.tableWidget.item(6, 5).text()}
+        config['AFP2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(7, 2).text(),
+                          'B': self.tableWidget.item(7, 3).text(),
+                          'C': self.tableWidget.item(7, 4).text(),
+                          'D': self.tableWidget.item(7, 5).text()}
+        config['hCG2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(8, 2).text(),
+                          'B': self.tableWidget.item(8, 3).text(),
+                          'C': self.tableWidget.item(8, 4).text(),
+                          'D': self.tableWidget.item(8, 5).text()}
+        config['fbhCG2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                            'A': self.tableWidget.item(9, 2).text(),
+                            'B': self.tableWidget.item(9, 3).text(),
+                            'C': self.tableWidget.item(9, 4).text(),
+                            'D': self.tableWidget.item(9, 5).text()}
+        config['uE32'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                          'A': self.tableWidget.item(10, 2).text(),
+                          'B': self.tableWidget.item(10, 3).text(),
+                          'C': self.tableWidget.item(10, 4).text(),
+                          'D': self.tableWidget.item(10, 5).text()}
+        config['InhA2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                           'A': self.tableWidget.item(11, 2).text(),
+                           'B': self.tableWidget.item(11, 3).text(),
+                           'C': self.tableWidget.item(11, 4).text(),
+                           'D': self.tableWidget.item(11, 5).text()}
+        config['PAPPA2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+                            'A': self.tableWidget.item(12, 2).text(),
+                            'B': self.tableWidget.item(12, 3).text(),
+                            'C': self.tableWidget.item(12, 4).text(),
+                            'D': self.tableWidget.item(12, 5).text()}
+        with open(fileName, 'w') as configfile:
+            config.write(configfile)
+        configfile.close()
+
+    # 当点击导入按钮之后
+    def in_put_setting(self):
+        fileName, fileType = QFileDialog.getOpenFileName(None, "打开文件", "D:\\", "Text Files (*.ini);")
+        config = configparser.ConfigParser()
+        config.read(fileName)
+        item = self.tableWidget.item(1, 1)
+        item.setText(config['AFP1']["体重校正参数"])
+        item = self.tableWidget.item(1, 2)
+        item.setText(config['AFP1']["A"])
+        item = self.tableWidget.item(1, 3)
+        item.setText(config['AFP1']["B"])
+        item = self.tableWidget.item(1, 4)
+        item.setText(config['AFP1']["C"])
+        item = self.tableWidget.item(1, 5)
+        item.setText(config['AFP1']["D"])
+
+        item = self.tableWidget.item(2, 1)
+        item.setText(config['hCG1']["体重校正参数"])
+        item = self.tableWidget.item(2, 2)
+        item.setText(config['hCG1']["A"])
+        item = self.tableWidget.item(2, 3)
+        item.setText(config['hCG1']["B"])
+        item = self.tableWidget.item(2, 4)
+        item.setText(config['hCG1']["C"])
+        item = self.tableWidget.item(2, 5)
+        item.setText(config['hCG1']["D"])
+
+        item = self.tableWidget.item(3, 1)
+        item.setText(config['fbhCG1']["体重校正参数"])
+        item = self.tableWidget.item(3, 2)
+        item.setText(config['fbhCG1']["A"])
+        item = self.tableWidget.item(3, 3)
+        item.setText(config['fbhCG1']["B"])
+        item = self.tableWidget.item(3, 4)
+        item.setText(config['fbhCG1']["C"])
+        item = self.tableWidget.item(3, 5)
+        item.setText(config['fbhCG1']["D"])
+
+        item = self.tableWidget.item(4, 1)
+        item.setText(config['uE31']["体重校正参数"])
+        item = self.tableWidget.item(4, 2)
+        item.setText(config['uE31']["A"])
+        item = self.tableWidget.item(4, 3)
+        item.setText(config['uE31']["B"])
+        item = self.tableWidget.item(4, 4)
+        item.setText(config['uE31']["C"])
+        item = self.tableWidget.item(4, 5)
+        item.setText(config['uE31']["D"])
+
+        item = self.tableWidget.item(5, 1)
+        item.setText(config['InhA1']["体重校正参数"])
+        item = self.tableWidget.item(5, 2)
+        item.setText(config['InhA1']["A"])
+        item = self.tableWidget.item(5, 3)
+        item.setText(config['InhA1']["B"])
+        item = self.tableWidget.item(5, 4)
+        item.setText(config['InhA1']["C"])
+        item = self.tableWidget.item(5, 5)
+        item.setText(config['InhA1']["D"])
+
+        item = self.tableWidget.item(6, 1)
+        item.setText(config['PAPPA1']["体重校正参数"])
+        item = self.tableWidget.item(6, 2)
+        item.setText(config['PAPPA1']["A"])
+        item = self.tableWidget.item(6, 3)
+        item.setText(config['PAPPA1']["B"])
+        item = self.tableWidget.item(6, 4)
+        item.setText(config['PAPPA1']["C"])
+        item = self.tableWidget.item(6, 5)
+        item.setText(config['PAPPA1']["D"])
+
+        item = self.tableWidget.item(7, 1)
+        item.setText(config['AFP2']["体重校正参数"])
+        item = self.tableWidget.item(7, 2)
+        item.setText(config['AFP2']["A"])
+        item = self.tableWidget.item(7, 3)
+        item.setText(config['AFP2']["B"])
+        item = self.tableWidget.item(7, 4)
+        item.setText(config['AFP2']["C"])
+        item = self.tableWidget.item(7, 5)
+        item.setText(config['AFP2']["D"])
+
+        item = self.tableWidget.item(8, 1)
+        item.setText(config['hCG2']["体重校正参数"])
+        item = self.tableWidget.item(8, 2)
+        item.setText(config['hCG2']["A"])
+        item = self.tableWidget.item(8, 3)
+        item.setText(config['hCG2']["B"])
+        item = self.tableWidget.item(8, 4)
+        item.setText(config['hCG2']["C"])
+        item = self.tableWidget.item(8, 5)
+        item.setText(config['hCG2']["D"])
+
+        item = self.tableWidget.item(9, 1)
+        item.setText(config['fbhCG2']["体重校正参数"])
+        item = self.tableWidget.item(9, 2)
+        item.setText(config['fbhCG2']["A"])
+        item = self.tableWidget.item(9, 3)
+        item.setText(config['fbhCG2']["B"])
+        item = self.tableWidget.item(9, 4)
+        item.setText(config['fbhCG2']["C"])
+        item = self.tableWidget.item(9, 5)
+        item.setText(config['fbhCG2']["D"])
+
+        item = self.tableWidget.item(10, 1)
+        item.setText(config['uE32']["体重校正参数"])
+        item = self.tableWidget.item(10, 2)
+        item.setText(config['uE32']["A"])
+        item = self.tableWidget.item(10, 3)
+        item.setText(config['uE32']["B"])
+        item = self.tableWidget.item(10, 4)
+        item.setText(config['uE32']["C"])
+        item = self.tableWidget.item(10, 5)
+        item.setText(config['uE32']["D"])
+
+        item = self.tableWidget.item(11, 1)
+        item.setText(config['InhA2']["体重校正参数"])
+        item = self.tableWidget.item(11, 2)
+        item.setText(config['InhA2']["A"])
+        item = self.tableWidget.item(11, 3)
+        item.setText(config['InhA2']["B"])
+        item = self.tableWidget.item(11, 4)
+        item.setText(config['InhA2']["C"])
+        item = self.tableWidget.item(11, 5)
+        item.setText(config['InhA2']["D"])
+
+        item = self.tableWidget.item(12, 1)
+        item.setText(config['PAPPA2']["体重校正参数"])
+        item = self.tableWidget.item(12, 2)
+        item.setText(config['PAPPA2']["A"])
+        item = self.tableWidget.item(12, 3)
+        item.setText(config['PAPPA2']["B"])
+        item = self.tableWidget.item(12, 4)
+        item.setText(config['PAPPA2']["C"])
+        item = self.tableWidget.item(12, 5)
+        item.setText(config['PAPPA2']["D"])
 
 
 if __name__ == "__main__":
-
     app = QApplication(sys.argv)
     main_win = UiWeight()
 

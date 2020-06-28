@@ -10,15 +10,15 @@ class UiMedian(QDialog):
     def __init__(self):
         super().__init__()
         self.setObjectName("Dialog")
-        self.resize(1120, 730)
-        self.setMinimumSize(QtCore.QSize(1120, 730))
-        self.setMaximumSize(QtCore.QSize(1120, 730))
+        self.resize(1120, 640)
+        self.setMinimumSize(QtCore.QSize(1120, 640))
+        self.setMaximumSize(QtCore.QSize(1120, 640))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.setFont(font)
         self.title = QtWidgets.QLabel(self)
-        self.title.setGeometry(QtCore.QRect(100, 30, 400, 60))
+        self.title.setGeometry(QtCore.QRect(100, 10, 400, 35))
         font = QtGui.QFont()
         font.setPointSize(19)
         font.setBold(True)
@@ -27,7 +27,7 @@ class UiMedian(QDialog):
         self.title.setObjectName("title")
         #多界面框
         self.tabWidget = QtWidgets.QTabWidget(self)
-        self.tabWidget.setGeometry(QtCore.QRect(70, 100, 470, 540))
+        self.tabWidget.setGeometry(QtCore.QRect(70, 60, 470, 540))
         self.tabWidget.setTabPosition(QtWidgets.QTabWidget.North)
         self.tabWidget.setTabShape(QtWidgets.QTabWidget.Rounded)
         self.tabWidget.setObjectName("tabWidget")
@@ -161,7 +161,7 @@ class UiMedian(QDialog):
     # 中位数表格标题设置
     def median_table_title(self):
         self.table_title = QtWidgets.QLabel(self)
-        self.table_title.setGeometry(QtCore.QRect(600, 90, 500, 40))
+        self.table_title.setGeometry(QtCore.QRect(600, 60, 500, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
@@ -1198,7 +1198,7 @@ class UiMedian(QDialog):
     def table_view_setting(self):
         self.tableWidget = QtWidgets.QTableWidget(self)
         self.tableWidget.setEnabled(True)
-        self.tableWidget.setGeometry(QtCore.QRect(600, 130, 480, 510))
+        self.tableWidget.setGeometry(QtCore.QRect(600, 90, 480, 510))
         self.tableWidget.setAutoScroll(False)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidget.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)

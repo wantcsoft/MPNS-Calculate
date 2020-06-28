@@ -46,24 +46,6 @@ class QueryData(object):
 		        order by MedianVerNo desc''' % (gestation)
         return self.cursor.execute(sql).fetchall()
 
-    # 根据审核状态查询出具体的数量（与日期无关）
-    def query_workflow_count(self, verify_workflow):
-        sql = """select count (*)
-		from V_DS_TotalInfo_based_on_SolutionRiskInfo 
-		where VerifyWorkFlow in %s""" % (verify_workflow)
-        return self.cursor.execute(sql).fetchall()
-
-    # 根据审核状态查询关键字段（与日期无关）
-    def query_workflow(self, verify_workflow):
-        sql = """select CheckNo, SolutionRiskSerialID, PatientSerialID,
-			EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
-			GestationWeek_E, GestationWeek_M,
-			GestationDay_E, GestationDay_M,
-			GestationType_E, GestationType_M
-			from V_DS_TotalInfo_based_on_SolutionRiskInfo
-			where VerifyWorkFlow in %s""" % (verify_workflow)
-        return self.cursor.execute(sql).fetchall()
-
     # 通过时间还有筛查流程状态查询出只有一次检查的人的个数
     def query_one_time_workflow_count(self, start, end, verify_workflow):
         sql = """select count(*)
@@ -74,29 +56,16 @@ class QueryData(object):
 		or TestDate_M between '%s' and '%s')""" % (verify_workflow, start, end, start, end)
         return self.cursor.execute(sql).fetchall()
 
-    # 通过时间还有筛查流程状态查询出有两次检查的人的个数（测试日期只需要有一个在日期范围内）
+    # 通过时间还有筛查流程状态查询出有两次检查的人的个数（中期测试日期在日期范围内）
     def query_two_time_workflow_any_count(self, start, end, verify_workflow):
         sql = """select count(*)
 		from V_DS_TotalInfo_based_on_SolutionRiskInfo
 		where VerifyWorkFlow in %s
 		and (TestDate_E is not null and TestDate_M is not null)
-		and 
-		(TestDate_E between '%s' and '%s' 
-		or TestDate_M between '%s' and '%s')""" % (verify_workflow, start, end, start, end)
+		and TestDate_M between '%s' and '%s'""" % (verify_workflow, start, end)
         return self.cursor.execute(sql).fetchall()
 
-    # 通过时间还有筛查流程状态查询出有两次检查的人的个数（早期和中期测试日期必须都在日期范围内）
-    def query_two_time_workflow_all_count(self, start, end, verify_workflow):
-        sql = """select count(*)
-		from V_DS_TotalInfo_based_on_SolutionRiskInfo
-		where VerifyWorkFlow in %s
-		and (TestDate_E is not null and TestDate_M is not null)
-		and 
-		(TestDate_E between '%s' and '%s' 
-		and TestDate_M between '%s' and '%s')""" % (verify_workflow, start, end, start, end)
-        return self.cursor.execute(sql).fetchall()
-
-    # 通过时间还有筛查流程状态查询出有两次检查的人的数据（测试日期只需要有一个在日期范围内）
+    # 通过时间还有筛查流程状态查询出一个检测日期和联合方案的数据（联合方案时中期测试日期在范围内）
     def query_time_workflow_any(self, start, end, verify_workflow):
         sql = """select CheckNo, SolutionRiskSerialID, PatientSerialID,
 						EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
@@ -106,9 +75,7 @@ class QueryData(object):
 						from V_DS_TotalInfo_based_on_SolutionRiskInfo
 						where VerifyWorkFlow in %s
 						and (TestDate_E is not null and TestDate_M is not null)
-						and 
-						(TestDate_E between '%s' and '%s' 
-						or TestDate_M between '%s' and '%s')
+						and TestDate_M between '%s' and '%s'
 		union
 				select CheckNo, SolutionRiskSerialID, PatientSerialID,
 					EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
@@ -120,34 +87,7 @@ class QueryData(object):
 					and (TestDate_E is null or TestDate_M is null)
 					and (TestDate_E between '%s' and '%s' 
 					or TestDate_M between '%s' and '%s')""" % (
-            verify_workflow, start, end, start, end, verify_workflow, start, end, start, end)
-        return self.cursor.execute(sql).fetchall()
-
-    # 通过时间还有筛查流程状态查询出有两次检查的人的数据（早期和中期测试日期必须都在日期范围内）
-    def query_time_workflow_all(self, start, end, verify_workflow):
-        sql = """select CheckNo, SolutionRiskSerialID, PatientSerialID,
-						EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
-						GestationWeek_E, GestationWeek_M,
-						GestationDay_E, GestationDay_M,
-						GestationType_E, GestationType_M
-						from V_DS_TotalInfo_based_on_SolutionRiskInfo
-						where VerifyWorkFlow in %s
-						and (TestDate_E is not null and TestDate_M is not null)
-						and 
-						(TestDate_E between '%s' and '%s' 
-						and TestDate_M between '%s' and '%s')
-		union
-				select CheckNo, SolutionRiskSerialID, PatientSerialID,
-					EarlySampleSerialID, MiddleSampleSerialID, PregnantSerialID,
-					GestationWeek_E, GestationWeek_M,
-					GestationDay_E, GestationDay_M,
-					GestationType_E, GestationType_M
-					from V_DS_TotalInfo_based_on_SolutionRiskInfo
-					where VerifyWorkFlow in %s
-					and (TestDate_E is null or TestDate_M is null)
-					and (TestDate_E between '%s' and '%s' 
-					or TestDate_M between '%s' and '%s')""" % (
-            verify_workflow, start, end, start, end, verify_workflow, start, end, start, end)
+            verify_workflow, start, end, verify_workflow, start, end, start, end)
         return self.cursor.execute(sql).fetchall()
 
     # 根据solutionRiskSerialID去查找拼串
@@ -347,7 +287,7 @@ class QueryData(object):
 
     # 获取标记物测量值
     def query_item_value(self, sampleSerialID, testItem):
-        sql = """select Result
+        sql = """select Result, MedianVerNo
         		from WOR_DS_TestInfo 
         		WHERE SampleSerialID = %d
         		and TestItemID = % s""" % (sampleSerialID, testItem)
@@ -370,8 +310,8 @@ if __name__ == "__main__":
     con = QueryData()
     con.connect("{SQL Server}", "DESKTOP-SM51UF2\\MOZZIE", "Mozzie", "john", "1234")
 
-    test = datetime.date(con.query_premature_age(24)[0].TestDate).day
-    con.query_CRL_weekday(24, 2)[0].CheckDate
+    test = (con.query_item_value(44, 2)[0][1])
+    print(type(test))
 
 #
 # list = con.master_version_query()

@@ -15,9 +15,9 @@ class UiDatabase(QDialog):
     def	__init__(self):
         super().__init__()
         self.setObjectName("Dialog")
-        self.resize(600, 550)
-        self.setMinimumSize(QtCore.QSize(600, 550))
-        self.setMaximumSize(QtCore.QSize(600, 550))
+        self.resize(600, 530)
+        self.setMinimumSize(QtCore.QSize(600, 530))
+        self.setMaximumSize(QtCore.QSize(600, 530))
         self.setLayoutDirection(QtCore.Qt.LeftToRight)
 
         self.formLayoutWidget = QtWidgets.QWidget(self)

@@ -69,8 +69,6 @@ class UiMainWindow(QMainWindow):
     # 组件命名
     def retranslateUi(self):
         self.setWindowTitle("Form")
-        self.radioButton.setText("早期或者中期两个都在范围内")
-        self.radioButton_2.setText("早期或中期只需一个在范围内")
 
         self.setWindowTitle("MPNS_Batch_Calculation")
         self.database_setting.setText("数据库设置")
@@ -79,7 +77,7 @@ class UiMainWindow(QMainWindow):
         self.weight_setting.setText("体重校正参数设置")
         self.multithreading_setting.setText("多线程设置")
         self.calculate.setText("开始计算")
-        self.count_number.setText("测试计算数量")
+        self.count_number.setText("查看计算数量")
         # 中位数配置启用
         self.checkBox_median.setText("启用中位数")
         self.checkBox_weight.setText("启用体重校正参数")
@@ -106,8 +104,8 @@ class UiMainWindow(QMainWindow):
     # 主窗口设置
     def main_window_setting(self):
         # 主窗口设置
-        self.resize(1200, 600)
-        self.setMinimumSize(QtCore.QSize(1200, 600))
+        self.resize(1200, 550)
+        self.setMinimumSize(QtCore.QSize(1200, 550))
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.setMouseTracking(False)
         self.setWindowOpacity(1.0)
@@ -164,14 +162,6 @@ class UiMainWindow(QMainWindow):
         self.calculate.setObjectName("calculate")
         self.calculate.clicked.connect(self.calculate_start)
 
-    # 测试计算数量按钮
-    def counts_button_setting(self):
-        # 测试数量按钮
-        self.count_number = QtWidgets.QPushButton(self.centralwidget)
-        self.count_number.setGeometry(QtCore.QRect(900, 160, 180, 50))
-        self.count_number.setObjectName("calculate")
-        self.count_number.clicked.connect(self.count_number_settint)
-
     # 中位数配置启用按钮
     def enable_median_setting(self):
         self.checkBox_median = QtWidgets.QCheckBox(self.centralwidget)
@@ -212,7 +202,7 @@ class UiMainWindow(QMainWindow):
     # 筛查流程状态选择
     def label_workflow_sign_setting(self):
         self.label_workflow_sign = QtWidgets.QLabel(self.centralwidget)
-        self.label_workflow_sign.setGeometry(QtCore.QRect(500, 170, 300, 80))
+        self.label_workflow_sign.setGeometry(QtCore.QRect(100, 315, 300, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label_workflow_sign.setFont(font)
@@ -220,27 +210,17 @@ class UiMainWindow(QMainWindow):
     # 测试日期范围
     def label_setting(self):
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(100, 170, 300, 80))
+        self.label.setGeometry(QtCore.QRect(100, 200, 300, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label.setFont(font)
-
-    # 计算进度
-    def progressBar_setting(self):
-        # 进度条设置
-        self.progressBar = QtWidgets.QLabel(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(100, 410, 400, 60))
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.progressBar.setFont(font)
-        self.progressBar.setObjectName("progressBar")
 
     # 工作流状态
     def workflow_setting(self):
         # 设置工作流程的位置
         # 工作流状态
         self.no_risk = QtWidgets.QCheckBox(self.centralwidget)
-        self.no_risk.setGeometry(QtCore.QRect(500, 230, 300, 30))
+        self.no_risk.setGeometry(QtCore.QRect(100, 350, 300, 20))
         self.no_risk.setObjectName("no_risk")
         self.no_risk.click()
         font = QtGui.QFont()
@@ -248,7 +228,7 @@ class UiMainWindow(QMainWindow):
         self.no_risk.setFont(font)
 
         self.have_risk = QtWidgets.QCheckBox(self.centralwidget)
-        self.have_risk.setGeometry(QtCore.QRect(500, 270, 300, 30))
+        self.have_risk.setGeometry(QtCore.QRect(100, 390, 300, 20))
         self.have_risk.setObjectName("have_risk")
         self.have_risk.click()
         font = QtGui.QFont()
@@ -256,7 +236,7 @@ class UiMainWindow(QMainWindow):
         self.have_risk.setFont(font)
 
         self.to_check = QtWidgets.QCheckBox(self.centralwidget)
-        self.to_check.setGeometry(QtCore.QRect(500, 310, 300, 30))
+        self.to_check.setGeometry(QtCore.QRect(100, 430, 300, 20))
         self.to_check.setObjectName("to_check")
         self.to_check.click()
         font = QtGui.QFont()
@@ -264,7 +244,7 @@ class UiMainWindow(QMainWindow):
         self.to_check.setFont(font)
 
         self.have_check = QtWidgets.QCheckBox(self.centralwidget)
-        self.have_check.setGeometry(QtCore.QRect(500, 350, 300, 30))
+        self.have_check.setGeometry(QtCore.QRect(100, 470, 300, 20))
         self.have_check.setObjectName("have_check")
         self.have_check.click()
         font = QtGui.QFont()
@@ -290,36 +270,39 @@ class UiMainWindow(QMainWindow):
         font.setPointSize(11)
         self.dateEdit_2.setFont(font)
 
-        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton.setGeometry(QtCore.QRect(100, 310, 350, 30))
-        self.radioButton.setObjectName("radioButton")
-        self.radioButton.click()
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.radioButton.setFont(font)
-
-        self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_2.setGeometry(QtCore.QRect(100, 350, 350, 30))
-        self.radioButton_2.setObjectName("radioButton_2")
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.radioButton_2.setFont(font)
-
     # 数据总数文字显示
     def page_count_setting(self):
         # 筛选数据总数量
         self.lable_total = QtWidgets.QLabel(self.centralwidget)
-        self.lable_total.setGeometry(QtCore.QRect(100, 370, 400, 60))
+        self.lable_total.setGeometry(QtCore.QRect(500, 200, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_total.setFont(font)
         self.lable_total.setObjectName("lable_total")
 
+    # 查看计算数量按钮
+    def counts_button_setting(self):
+        # 测试数量按钮
+        self.count_number = QtWidgets.QPushButton(self.centralwidget)
+        self.count_number.setGeometry(QtCore.QRect(840, 200, 120, 30))
+        self.count_number.setObjectName("calculate")
+        self.count_number.clicked.connect(self.count_number_settint)
+
+    # 计算进度
+    def progressBar_setting(self):
+        # 进度条设置
+        self.progressBar = QtWidgets.QLabel(self.centralwidget)
+        self.progressBar.setGeometry(QtCore.QRect(500, 230, 400, 30))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.progressBar.setFont(font)
+        self.progressBar.setObjectName("progressBar")
+
     # 计算异常总数量数据总数文字显示
     def lable_exception_setting(self):
         # 筛选数据总数量
         self.lable_exception = QtWidgets.QLabel(self.centralwidget)
-        self.lable_exception.setGeometry(QtCore.QRect(100, 450, 400, 60))
+        self.lable_exception.setGeometry(QtCore.QRect(500, 270, 400, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_exception.setFont(font)
@@ -329,7 +312,7 @@ class UiMainWindow(QMainWindow):
     def lable_start_time_setting(self):
         # 筛选数据总数量
         self.lable_start_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_start_time.setGeometry(QtCore.QRect(500, 370, 400, 60))
+        self.lable_start_time.setGeometry(QtCore.QRect(500, 310, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_start_time.setFont(font)
@@ -339,7 +322,7 @@ class UiMainWindow(QMainWindow):
     def lable_complete_time_setting(self):
         # 筛选数据总数量
         self.lable_complete_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_complete_time.setGeometry(QtCore.QRect(500, 410, 400, 60))
+        self.lable_complete_time.setGeometry(QtCore.QRect(500, 350, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_complete_time.setFont(font)
@@ -348,7 +331,7 @@ class UiMainWindow(QMainWindow):
     # 计算剩余时间
     def lable_left_time_setting(self):
         self.lable_left_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_left_time.setGeometry(QtCore.QRect(500, 450, 400, 60))
+        self.lable_left_time.setGeometry(QtCore.QRect(500, 390, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_left_time.setFont(font)
@@ -357,7 +340,7 @@ class UiMainWindow(QMainWindow):
     # 总共花费时间时间
     def lable_spend_time_setting(self):
         self.lable_spend_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_spend_time.setGeometry(QtCore.QRect(500, 490, 400, 60))
+        self.lable_spend_time.setGeometry(QtCore.QRect(500, 430, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_spend_time.setFont(font)
@@ -367,7 +350,7 @@ class UiMainWindow(QMainWindow):
     def calculate_sucess_setting(self):
         # 筛选数据总数量
         self.calculate_sucess = QtWidgets.QLabel(self.centralwidget)
-        self.calculate_sucess.setGeometry(QtCore.QRect(360, 520, 180, 50))
+        self.calculate_sucess.setGeometry(QtCore.QRect(500, 470, 180, 50))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.calculate_sucess.setFont(font)
@@ -378,7 +361,7 @@ class UiMainWindow(QMainWindow):
     def check_error_button_setting(self):
         # 计算按钮
         self.check_error = QtWidgets.QPushButton(self.centralwidget)
-        self.check_error.setGeometry(QtCore.QRect(350, 460, 80, 30))
+        self.check_error.setGeometry(QtCore.QRect(840, 270, 60, 30))
         self.check_error.setObjectName("check_error")
         self.check_error.clicked.connect(self.check_error_start)
 
@@ -388,14 +371,11 @@ class UiMainWindow(QMainWindow):
         file_path = LoggerFile.error_path
         os.startfile(file_path)
 
-    # 点击测试计算数量按钮之后
+    # 点击查看计算数量按钮之后
     def count_number_settint(self):
         if not self.main_database_connect_flag:
             self.ui_warning_database.setWindowModality(Qt.ApplicationModal)
             self.ui_warning_database.exec_()
-        elif not self.main_median_flag and not self.main_weight_flag:
-            self.ui_warning_median.setWindowModality(Qt.ApplicationModal)
-            self.ui_warning_median.exec_()
         else:
             verify_workflow = self.get_workflow_state()
             if self.dateEdit_2.date() > self.dateEdit.date():
@@ -406,24 +386,16 @@ class UiMainWindow(QMainWindow):
                 end = self.dateEdit.date().getDate()
             start_time = "%d-%d-%d 00:00:00" % (start[0], start[1], start[2])
             end_time = "%d-%d-%d 23:59:59" % (end[0], end[1], end[2])
-            # 两个都在日期范围内
-            if self.radioButton.isChecked():
-                count_one = self.connect.query_one_time_workflow_count(start_time,
+            # 联合方案需要中期检测时间日期范围内
+            # 只有一个检测方案的人数
+            count_one = self.connect.query_one_time_workflow_count(start_time,
+                                                                   end_time,
+                                                                   verify_workflow.__str__())[0][0]
+            # 有两个检测方案的人数
+            count_two = self.connect.query_two_time_workflow_any_count(start_time,
                                                                        end_time,
                                                                        verify_workflow.__str__())[0][0]
-                count_two = self.connect.query_two_time_workflow_all_count(start_time,
-                                                                           end_time,
-                                                                           verify_workflow.__str__())[0][0]
-                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
-            # 只需要一个在范围内
-            else:
-                count_one = self.connect.query_one_time_workflow_count(start_time,
-                                                                       end_time,
-                                                                       verify_workflow.__str__())[0][0]
-                count_two = self.connect.query_two_time_workflow_any_count(start_time,
-                                                                           end_time,
-                                                                           verify_workflow.__str__())[0][0]
-                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
+            self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
 
     # 计算按钮点击之后
     def calculate_start(self):
@@ -431,24 +403,8 @@ class UiMainWindow(QMainWindow):
         if not self.main_database_connect_flag:
             self.ui_warning_database.setWindowModality(Qt.ApplicationModal)
             self.ui_warning_database.exec_()
-        elif not self.main_median_flag and not self.main_weight_flag:
-            self.ui_warning_median.setWindowModality(Qt.ApplicationModal)
-            self.ui_warning_median.exec_()
         else:
             verify_workflow = self.get_workflow_state()
-            # if self.dateEdit.date() == self.dateEdit_2.date():
-            #     count = self.connect.query_workflow_count(verify_workflow.__str__())[0][0]
-            #     self.lable_total.setText("筛查方案数量：%s" % count)
-            #     if count > 0:
-            #         # 开始计算时其他控件无法使用
-            #         self.setEnabled(False)
-            #         self.lable_start_time.setText("计算开始时间：%s" %
-            #                                       time.strftime('%Y-%m-%d %H:%M:%S',
-            #                                                     time.localtime(time.time())))
-            #         data_list = self.connect.query_workflow(verify_workflow.__str__())
-            #         thread = MultiThreading.MultiThreading(self, data_list, count)
-            #         thread.start()
-            # else:
             if self.dateEdit_2.date() > self.dateEdit.date():
                 end = self.dateEdit_2.date().getDate()
                 start = self.dateEdit.date().getDate()
@@ -457,46 +413,25 @@ class UiMainWindow(QMainWindow):
                 end = self.dateEdit.date().getDate()
             start_time = "%d-%d-%d 00:00:00" % (start[0], start[1], start[2])
             end_time = "%d-%d-%d 23:59:59" % (end[0], end[1], end[2])
-            # 两个都在日期范围内
-            if self.radioButton.isChecked():
-                count_one = self.connect.query_one_time_workflow_count(start_time,
-                                                                       end_time,
-                                                                       verify_workflow.__str__())[0][0]
-                count_two = self.connect.query_two_time_workflow_all_count(start_time,
-                                                                           end_time,
-                                                                           verify_workflow.__str__())[0][0]
-                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
-                if (count_one + count_two) > 0:
-                    # 开始计算时其他控件无法使用
-                    self.setEnabled(False)
-                    self.lable_start_time.setText("计算开始时间：%s" %
-                                                  time.strftime('%Y-%m-%d %H:%M:%S',
-                                                                time.localtime(time.time())))
-                    data_list = self.connect.query_time_workflow_all(start_time,
-                                                                     end_time,
-                                                                     verify_workflow.__str__())
-                    thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
-                    thread.start()
             # 只需要一个在范围内
-            else:
-                count_one = self.connect.query_one_time_workflow_count(start_time,
+            count_one = self.connect.query_one_time_workflow_count(start_time,
+                                                                   end_time,
+                                                                   verify_workflow.__str__())[0][0]
+            count_two = self.connect.query_two_time_workflow_any_count(start_time,
                                                                        end_time,
                                                                        verify_workflow.__str__())[0][0]
-                count_two = self.connect.query_two_time_workflow_any_count(start_time,
-                                                                           end_time,
-                                                                           verify_workflow.__str__())[0][0]
-                self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
-                if (count_one + count_two) > 0:
-                    # 开始计算时其他控件无法使用
-                    self.setEnabled(False)
-                    self.lable_start_time.setText("计算开始时间：%s" %
-                                                  time.strftime('%Y-%m-%d %H:%M:%S',
-                                                                time.localtime(time.time())))
-                    data_list = self.connect.query_time_workflow_any(start_time,
-                                                                     end_time,
-                                                                     verify_workflow.__str__())
-                    thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
-                    thread.start()
+            self.lable_total.setText("筛查方案数量：%s 例" % (count_one + count_two))
+            if (count_one + count_two) > 0:
+                # 开始计算时其他控件无法使用
+                self.setEnabled(False)
+                self.lable_start_time.setText("计算开始时间：%s" %
+                                              time.strftime('%Y-%m-%d %H:%M:%S',
+                                                            time.localtime(time.time())))
+                data_list = self.connect.query_time_workflow_any(start_time,
+                                                                 end_time,
+                                                                 verify_workflow.__str__())
+                thread = MultiThreading.MultiThreading(self, data_list, count_one+count_two)
+                thread.start()
 
     # 返回筛选流程的状态集合
     def get_workflow_state(self):
@@ -690,7 +625,11 @@ class UiMainWindow(QMainWindow):
             self.ui_median.version_BC_13.currentText().split("  ")[0]
         self.median_config = {"1": dict_LMP, "2": dict_BPD, "3": dict_CRL, "4": dict_IVF, "5": dict_BC}
         if self.checkBox_median.isChecked():
-            logger.info("选择的标记物版本设置 = %s" % self.median_config)
+            logger.info("选择的标记物版本LMP: AFP_M = %s, tbhCG_M = %s, uE3_M = %s, InhA_M = %s, fbhCG_M = %s, PAPPA_M = %s, NT_E = %s, AFP_E = %s, tbhCG_E = %s, uE3_E = %s, InhA_E = %s, fbhCG_E = %s, PAPPA_E = %s" % (self.median_config.get("1").get("1"), self.median_config.get("1").get("2"), self.median_config.get("1").get("3"), self.median_config.get("1").get("4"), self.median_config.get("1").get("5"), self.median_config.get("1").get("6"), self.median_config.get("1").get("7"), self.median_config.get("1").get("8"), self.median_config.get("1").get("9"), self.median_config.get("1").get("10"), self.median_config.get("1").get("11"), self.median_config.get("1").get("12"), self.median_config.get("1").get("13")))
+            logger.info("选择的标记物版本BPD: AFP_M = %s, tbhCG_M = %s, uE3_M = %s, InhA_M = %s, fbhCG_M = %s, PAPPA_M = %s, NT_E = %s, AFP_E = %s, tbhCG_E = %s, uE3_E = %s, InhA_E = %s, fbhCG_E = %s, PAPPA_E = %s" % (self.median_config.get("2").get("1"), self.median_config.get("2").get("2"), self.median_config.get("2").get("3"), self.median_config.get("2").get("4"), self.median_config.get("2").get("5"), self.median_config.get("2").get("6"), self.median_config.get("2").get("7"), self.median_config.get("2").get("8"), self.median_config.get("2").get("9"), self.median_config.get("2").get("10"), self.median_config.get("2").get("11"), self.median_config.get("2").get("12"), self.median_config.get("2").get("13")))
+            logger.info("选择的标记物版本CRL: AFP_M = %s, tbhCG_M = %s, uE3_M = %s, InhA_M = %s, fbhCG_M = %s, PAPPA_M = %s, NT_E = %s, AFP_E = %s, tbhCG_E = %s, uE3_E = %s, InhA_E = %s, fbhCG_E = %s, PAPPA_E = %s" % (self.median_config.get("3").get("1"), self.median_config.get("3").get("2"), self.median_config.get("3").get("3"), self.median_config.get("3").get("4"), self.median_config.get("3").get("5"), self.median_config.get("3").get("6"), self.median_config.get("3").get("7"), self.median_config.get("3").get("8"), self.median_config.get("3").get("9"), self.median_config.get("3").get("10"), self.median_config.get("3").get("11"), self.median_config.get("3").get("12"), self.median_config.get("3").get("13")))
+            logger.info("选择的标记物版本IVF: AFP_M = %s, tbhCG_M = %s, uE3_M = %s, InhA_M = %s, fbhCG_M = %s, PAPPA_M = %s, NT_E = %s, AFP_E = %s, tbhCG_E = %s, uE3_E = %s, InhA_E = %s, fbhCG_E = %s, PAPPA_E = %s" % (self.median_config.get("4").get("1"), self.median_config.get("4").get("2"), self.median_config.get("4").get("3"), self.median_config.get("4").get("4"), self.median_config.get("4").get("5"), self.median_config.get("4").get("6"), self.median_config.get("4").get("7"), self.median_config.get("4").get("8"), self.median_config.get("4").get("9"), self.median_config.get("4").get("10"), self.median_config.get("4").get("11"), self.median_config.get("4").get("12"), self.median_config.get("4").get("13")))
+            logger.info("选择的标记物版本BC: AFP_M = %s, tbhCG_M = %s, uE3_M = %s, InhA_M = %s, fbhCG_M = %s, PAPPA_M = %s, NT_E = %s, AFP_E = %s, tbhCG_E = %s, uE3_E = %s, InhA_E = %s, fbhCG_E = %s, PAPPA_E = %s" % (self.median_config.get("5").get("1"), self.median_config.get("5").get("2"), self.median_config.get("5").get("3"), self.median_config.get("5").get("4"), self.median_config.get("5").get("5"), self.median_config.get("5").get("6"), self.median_config.get("5").get("7"), self.median_config.get("5").get("8"), self.median_config.get("5").get("9"), self.median_config.get("5").get("10"), self.median_config.get("5").get("11"), self.median_config.get("5").get("12"), self.median_config.get("5").get("13")))
             self.main_median_flag = True
         else:
             self.main_median_flag = False

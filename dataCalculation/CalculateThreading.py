@@ -80,20 +80,18 @@ class CalculateThreading(Thread):
             list = old_parameter.split("&")
             r11 = list[0].split("|")
             r16 = list[1].split("|")
-            # 如果配置了中位数版本，处理第二个拼串
-            if self.median_flag:
-                # 一个孕妇她测试了多少个标记物，按照123……进行排序放进list中
-                self.median_list = {}
-                # 遍历前14条数据，不为空说明该种标记物有值，上次进行了计算
-                for i in range(1, 14):
-                    if r16[i] != "":
-                        self.median_list[self.item_convert(i)] = 0
-                # 一种特殊的标记物NT_E2需要特殊判断一下
-                if r16[39] != "":
-                    logger.info("该条数据有标记物NT_E2")
-                    self.median_list["16"] = 0
-                # 得到跟新过的新的拼串
-                r16 = self.handle_median(r16, gestation_type, data)
+            # 一个孕妇她测试了多少个标记物，按照123……进行排序放进list中
+            self.median_list = {}
+            # 遍历前14条数据，不为空说明该种标记物有值，上次进行了计算
+            for i in range(1, 14):
+                if r16[i] != "":
+                    self.median_list[self.item_convert(i)] = 0
+            # 一种特殊的标记物NT_E2需要特殊判断一下
+            if r16[39] != "":
+                logger.info("该条数据有标记物NT_E2")
+                self.median_list["16"] = 0
+            # 得到跟新过的新的拼串
+            r16 = self.handle_median(r16, gestation_type, data)
             # 如果配置了体重校正参数，处理第一个拼串
             if self.weight_flag:
                 r11 = self.handle_weight(r11)
@@ -289,10 +287,13 @@ class CalculateThreading(Thread):
             # 如果有16号跳过，在7号标记物一并处理掉了
             if int(i) == 16:
                 continue
-            # 设置新的版本号
-            items_new_version = int(items.get(i))
             # 7号标记物NT需要特殊处理
             if int(i) == 7:
+                # 设置新的版本号
+                if self.median_flag:
+                    items_new_version = int(items.get(i))
+                else:
+                    items_new_version = self.connect.query_item_value(data.EarlySampleSerialID, i)[0][1]
                 # 获取NT标记物的长度，可能有一个值，也可能有两个值
                 check_value = self.get_nt_median(data.EarlySampleSerialID, gestation_type)
                 # 获取不到NT的值
@@ -322,6 +323,11 @@ class CalculateThreading(Thread):
                                                                               check_value[1])
             # 早期检测
             elif int(i) > 7:
+                # 设置新的版本号
+                if self.median_flag:
+                    items_new_version = int(items.get(i))
+                else:
+                    items_new_version = self.connect.query_item_value(data.EarlySampleSerialID, i)[0][1]
                 if items_new_version == 1:
                     # 获取母版本版本号和中位数值
                     median_data = self.connect.query_mather_medianValue(items_new_version, i,
@@ -334,6 +340,11 @@ class CalculateThreading(Thread):
                 self.median_list[i] = median_data
             # 中期检测
             if int(i) < 7:
+                # 设置新的版本号
+                if self.median_flag:
+                    items_new_version = int(items.get(i))
+                else:
+                    items_new_version = self.connect.query_item_value(data.MiddleSampleSerialID, i)[0][1]
                 if items_new_version == 1:
                     median_data = self.connect.query_mather_medianValue(items_new_version, i,
                                                                         str(data.GestationWeek_M) + "." + str(
