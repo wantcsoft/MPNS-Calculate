@@ -622,7 +622,7 @@ class CalculateThreading(Thread):
         risk.append(str(Trisomy))
         over_all_risk = '|'.join(risk)
         over_all_risk += "|0|0&||||||||||||||||"
-        logger.info("旧风险串  = %s" % self.connect.query_over_all_risk(solution_Risk_SerialID)[0][0])
+        logger.info("旧风险串 = %s" % self.connect.query_over_all_risk(solution_Risk_SerialID)[0][0])
         logger.info("新风险串 = %s" % over_all_risk)
         return over_all_risk
 

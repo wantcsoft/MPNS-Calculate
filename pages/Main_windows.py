@@ -55,9 +55,11 @@ class UiMainWindow(QMainWindow):
         self.check_error_button_setting()
         self.multithreading_button_setting()
         self.progressBar_setting()
+        self.calculate_process_setting()
         self.workflow_setting()
         self.prompt_setting()
         self.title_setting()
+        self.version_setting()
         self.median_button_setting()
         self.enable_median_setting()
         self.enable_weight_setting()
@@ -83,6 +85,7 @@ class UiMainWindow(QMainWindow):
         self.checkBox_weight.setText("启用体重校正参数")
 
         self.prompt.setText("本软件仅供科研使用")
+        self.version.setText("V1.3")
         self.title.setText("MPNS批量计算工具")
         self.label.setText("测试日期范围")
         self.label_workflow_sign.setText("筛查流程状态选择")
@@ -91,13 +94,14 @@ class UiMainWindow(QMainWindow):
         self.to_check.setText("已提交审核，待审核")
         self.have_check.setText("已审核通过")
 
-        self.check_error.setText("查看")
+        self.check_error.setText("查看异常日志")
+        self.calculate_process.setText("计算过程")
         self.lable_total.setText("筛查方案数量：0 例")
         self.progressBar.setText("计算进度：还剩 0 例")
         self.lable_exception.setText("异常数量：0 例")
         self.lable_start_time.setText("计算开始时间：")
         self.lable_complete_time.setText("预估完成时间：")
-        self.lable_left_time.setText("剩余时间：")
+        self.lable_left_time.setText("剩余计算时间：")
         self.lable_spend_time.setText("本次计算用时：")
         self.calculate_sucess.setText("计算完成")
 
@@ -113,6 +117,15 @@ class UiMainWindow(QMainWindow):
         self.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.setAutoFillBackground(True)
         self.setAnimated(False)
+
+    # 软件版本
+    def version_setting(self):
+        self.version = QtWidgets.QLabel(self.centralwidget)
+        self.version.setGeometry(QtCore.QRect(800, 60, 60, 30))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setPointSize(11)
+        self.version.setFont(font)
 
     # 数据库设置按钮
     def database_button_setting(self):
@@ -202,7 +215,7 @@ class UiMainWindow(QMainWindow):
     # 筛查流程状态选择
     def label_workflow_sign_setting(self):
         self.label_workflow_sign = QtWidgets.QLabel(self.centralwidget)
-        self.label_workflow_sign.setGeometry(QtCore.QRect(100, 315, 300, 20))
+        self.label_workflow_sign.setGeometry(QtCore.QRect(100, 335, 300, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label_workflow_sign.setFont(font)
@@ -210,7 +223,7 @@ class UiMainWindow(QMainWindow):
     # 测试日期范围
     def label_setting(self):
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(100, 200, 300, 20))
+        self.label.setGeometry(QtCore.QRect(100, 210, 300, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.label.setFont(font)
@@ -220,7 +233,7 @@ class UiMainWindow(QMainWindow):
         # 设置工作流程的位置
         # 工作流状态
         self.no_risk = QtWidgets.QCheckBox(self.centralwidget)
-        self.no_risk.setGeometry(QtCore.QRect(100, 350, 300, 20))
+        self.no_risk.setGeometry(QtCore.QRect(100, 370, 300, 20))
         self.no_risk.setObjectName("no_risk")
         self.no_risk.click()
         font = QtGui.QFont()
@@ -228,7 +241,7 @@ class UiMainWindow(QMainWindow):
         self.no_risk.setFont(font)
 
         self.have_risk = QtWidgets.QCheckBox(self.centralwidget)
-        self.have_risk.setGeometry(QtCore.QRect(100, 390, 300, 20))
+        self.have_risk.setGeometry(QtCore.QRect(100, 410, 300, 20))
         self.have_risk.setObjectName("have_risk")
         self.have_risk.click()
         font = QtGui.QFont()
@@ -236,7 +249,7 @@ class UiMainWindow(QMainWindow):
         self.have_risk.setFont(font)
 
         self.to_check = QtWidgets.QCheckBox(self.centralwidget)
-        self.to_check.setGeometry(QtCore.QRect(100, 430, 300, 20))
+        self.to_check.setGeometry(QtCore.QRect(100, 450, 300, 20))
         self.to_check.setObjectName("to_check")
         self.to_check.click()
         font = QtGui.QFont()
@@ -244,7 +257,7 @@ class UiMainWindow(QMainWindow):
         self.to_check.setFont(font)
 
         self.have_check = QtWidgets.QCheckBox(self.centralwidget)
-        self.have_check.setGeometry(QtCore.QRect(100, 470, 300, 20))
+        self.have_check.setGeometry(QtCore.QRect(100, 490, 300, 20))
         self.have_check.setObjectName("have_check")
         self.have_check.click()
         font = QtGui.QFont()
@@ -255,7 +268,7 @@ class UiMainWindow(QMainWindow):
     def time_setting(self):
         # # 开始时间结束时间设置
         self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
-        self.dateEdit.setGeometry(QtCore.QRect(100, 230, 200, 30))
+        self.dateEdit.setGeometry(QtCore.QRect(100, 250, 200, 30))
         self.dateEdit.setObjectName("dateEdit")
         self.dateEdit.setDate(QDate.currentDate())
         font = QtGui.QFont()
@@ -263,18 +276,28 @@ class UiMainWindow(QMainWindow):
         self.dateEdit.setFont(font)
 
         self.dateEdit_2 = QtWidgets.QDateEdit(self.centralwidget)
-        self.dateEdit_2.setGeometry(QtCore.QRect(100, 270, 200, 30))
+        self.dateEdit_2.setGeometry(QtCore.QRect(100, 290, 200, 30))
         self.dateEdit_2.setObjectName("dateEdit_2")
         self.dateEdit_2.setDate(QDate.currentDate())
         font = QtGui.QFont()
         font.setPointSize(11)
         self.dateEdit_2.setFont(font)
 
+    # 计算过程
+    def calculate_process_setting(self):
+        # 计算过程
+        self.calculate_process = QtWidgets.QLabel(self.centralwidget)
+        self.calculate_process.setGeometry(QtCore.QRect(600, 210, 400, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.calculate_process.setFont(font)
+        self.calculate_process.setObjectName("calculate_process")
+
     # 数据总数文字显示
     def page_count_setting(self):
         # 筛选数据总数量
         self.lable_total = QtWidgets.QLabel(self.centralwidget)
-        self.lable_total.setGeometry(QtCore.QRect(500, 200, 400, 20))
+        self.lable_total.setGeometry(QtCore.QRect(600, 250, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_total.setFont(font)
@@ -284,7 +307,7 @@ class UiMainWindow(QMainWindow):
     def counts_button_setting(self):
         # 测试数量按钮
         self.count_number = QtWidgets.QPushButton(self.centralwidget)
-        self.count_number.setGeometry(QtCore.QRect(840, 200, 120, 30))
+        self.count_number.setGeometry(QtCore.QRect(960, 250, 120, 30))
         self.count_number.setObjectName("calculate")
         self.count_number.clicked.connect(self.count_number_settint)
 
@@ -292,7 +315,7 @@ class UiMainWindow(QMainWindow):
     def progressBar_setting(self):
         # 进度条设置
         self.progressBar = QtWidgets.QLabel(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(500, 230, 400, 30))
+        self.progressBar.setGeometry(QtCore.QRect(600, 290, 400, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.progressBar.setFont(font)
@@ -302,7 +325,7 @@ class UiMainWindow(QMainWindow):
     def lable_exception_setting(self):
         # 筛选数据总数量
         self.lable_exception = QtWidgets.QLabel(self.centralwidget)
-        self.lable_exception.setGeometry(QtCore.QRect(500, 270, 400, 30))
+        self.lable_exception.setGeometry(QtCore.QRect(600, 330, 400, 30))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_exception.setFont(font)
@@ -312,7 +335,7 @@ class UiMainWindow(QMainWindow):
     def lable_start_time_setting(self):
         # 筛选数据总数量
         self.lable_start_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_start_time.setGeometry(QtCore.QRect(500, 310, 400, 20))
+        self.lable_start_time.setGeometry(QtCore.QRect(600, 370, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_start_time.setFont(font)
@@ -322,7 +345,7 @@ class UiMainWindow(QMainWindow):
     def lable_complete_time_setting(self):
         # 筛选数据总数量
         self.lable_complete_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_complete_time.setGeometry(QtCore.QRect(500, 350, 400, 20))
+        self.lable_complete_time.setGeometry(QtCore.QRect(600, 410, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_complete_time.setFont(font)
@@ -331,7 +354,7 @@ class UiMainWindow(QMainWindow):
     # 计算剩余时间
     def lable_left_time_setting(self):
         self.lable_left_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_left_time.setGeometry(QtCore.QRect(500, 390, 400, 20))
+        self.lable_left_time.setGeometry(QtCore.QRect(600, 450, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_left_time.setFont(font)
@@ -340,7 +363,7 @@ class UiMainWindow(QMainWindow):
     # 总共花费时间时间
     def lable_spend_time_setting(self):
         self.lable_spend_time = QtWidgets.QLabel(self.centralwidget)
-        self.lable_spend_time.setGeometry(QtCore.QRect(500, 430, 400, 20))
+        self.lable_spend_time.setGeometry(QtCore.QRect(600, 490, 400, 20))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.lable_spend_time.setFont(font)
@@ -350,7 +373,7 @@ class UiMainWindow(QMainWindow):
     def calculate_sucess_setting(self):
         # 筛选数据总数量
         self.calculate_sucess = QtWidgets.QLabel(self.centralwidget)
-        self.calculate_sucess.setGeometry(QtCore.QRect(500, 470, 180, 50))
+        self.calculate_sucess.setGeometry(QtCore.QRect(960, 480, 170, 30))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.calculate_sucess.setFont(font)
@@ -361,7 +384,7 @@ class UiMainWindow(QMainWindow):
     def check_error_button_setting(self):
         # 计算按钮
         self.check_error = QtWidgets.QPushButton(self.centralwidget)
-        self.check_error.setGeometry(QtCore.QRect(840, 270, 60, 30))
+        self.check_error.setGeometry(QtCore.QRect(960, 330, 120, 30))
         self.check_error.setObjectName("check_error")
         self.check_error.clicked.connect(self.check_error_start)
 

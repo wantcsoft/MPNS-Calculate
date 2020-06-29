@@ -76,7 +76,7 @@ class MultiThreading(threading.Thread):
             self.main_windows.progressBar.setText("计算进度:还剩 %s 例" % len(self.data_list))
             self.main_windows.progressBar.show()
             self.main_windows.lable_complete_time.setText("预估完成时间：%s" % estimate_time)
-            self.main_windows.lable_left_time.setText("剩余时间：%s" % str(datetime.timedelta(seconds=(time_num-current)))[: 7])
+            self.main_windows.lable_left_time.setText("剩余计算时间：%s" % str(datetime.timedelta(seconds=(time_num-current)))[: 7])
             self.main_windows.lable_exception.setText("异常数量：%s 例" % queue.qsize())
             self.main_windows.lable_exception.show()
 

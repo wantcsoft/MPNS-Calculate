@@ -390,62 +390,62 @@ class UiWeight(QDialog):
     def out_put_setting(self):
         fileName, fileType = QFileDialog.getSaveFileName(None, "文件保存", "D:/", "Text Files (*.ini);")
         config = configparser.ConfigParser()
-        config['AFP1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['AFP1'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(1, 2).text(),
                           'B': self.tableWidget.item(1, 3).text(),
                           'C': self.tableWidget.item(1, 4).text(),
                           'D': self.tableWidget.item(1, 5).text()}
-        config['hCG1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['hCG1'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(2, 2).text(),
                           'B': self.tableWidget.item(2, 3).text(),
                           'C': self.tableWidget.item(2, 4).text(),
                           'D': self.tableWidget.item(2, 5).text()}
-        config['fbhCG1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['fbhCG1'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(3, 2).text(),
                           'B': self.tableWidget.item(3, 3).text(),
                           'C': self.tableWidget.item(3, 4).text(),
                           'D': self.tableWidget.item(3, 5).text()}
-        config['uE31'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['uE31'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(4, 2).text(),
                           'B': self.tableWidget.item(4, 3).text(),
                           'C': self.tableWidget.item(4, 4).text(),
                           'D': self.tableWidget.item(4, 5).text()}
-        config['InhA1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['InhA1'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(5, 2).text(),
                           'B': self.tableWidget.item(5, 3).text(),
                           'C': self.tableWidget.item(5, 4).text(),
                           'D': self.tableWidget.item(5, 5).text()}
-        config['PAPPA1'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['PAPPA1'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(6, 2).text(),
                           'B': self.tableWidget.item(6, 3).text(),
                           'C': self.tableWidget.item(6, 4).text(),
                           'D': self.tableWidget.item(6, 5).text()}
-        config['AFP2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['AFP2'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(7, 2).text(),
                           'B': self.tableWidget.item(7, 3).text(),
                           'C': self.tableWidget.item(7, 4).text(),
                           'D': self.tableWidget.item(7, 5).text()}
-        config['hCG2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['hCG2'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(8, 2).text(),
                           'B': self.tableWidget.item(8, 3).text(),
                           'C': self.tableWidget.item(8, 4).text(),
                           'D': self.tableWidget.item(8, 5).text()}
-        config['fbhCG2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['fbhCG2'] = {'type': self.tableWidget.item(1, 1).text(),
                             'A': self.tableWidget.item(9, 2).text(),
                             'B': self.tableWidget.item(9, 3).text(),
                             'C': self.tableWidget.item(9, 4).text(),
                             'D': self.tableWidget.item(9, 5).text()}
-        config['uE32'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['uE32'] = {'type': self.tableWidget.item(1, 1).text(),
                           'A': self.tableWidget.item(10, 2).text(),
                           'B': self.tableWidget.item(10, 3).text(),
                           'C': self.tableWidget.item(10, 4).text(),
                           'D': self.tableWidget.item(10, 5).text()}
-        config['InhA2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['InhA2'] = {'type': self.tableWidget.item(1, 1).text(),
                            'A': self.tableWidget.item(11, 2).text(),
                            'B': self.tableWidget.item(11, 3).text(),
                            'C': self.tableWidget.item(11, 4).text(),
                            'D': self.tableWidget.item(11, 5).text()}
-        config['PAPPA2'] = {'体重校正参数': self.tableWidget.item(1, 1).text(),
+        config['PAPPA2'] = {'type': self.tableWidget.item(1, 1).text(),
                             'A': self.tableWidget.item(12, 2).text(),
                             'B': self.tableWidget.item(12, 3).text(),
                             'C': self.tableWidget.item(12, 4).text(),
@@ -460,7 +460,7 @@ class UiWeight(QDialog):
         config = configparser.ConfigParser()
         config.read(fileName)
         item = self.tableWidget.item(1, 1)
-        item.setText(config['AFP1']["体重校正参数"])
+        item.setText(config['AFP1']["type"])
         item = self.tableWidget.item(1, 2)
         item.setText(config['AFP1']["A"])
         item = self.tableWidget.item(1, 3)
@@ -471,7 +471,7 @@ class UiWeight(QDialog):
         item.setText(config['AFP1']["D"])
 
         item = self.tableWidget.item(2, 1)
-        item.setText(config['hCG1']["体重校正参数"])
+        item.setText(config['hCG1']["type"])
         item = self.tableWidget.item(2, 2)
         item.setText(config['hCG1']["A"])
         item = self.tableWidget.item(2, 3)
@@ -482,7 +482,7 @@ class UiWeight(QDialog):
         item.setText(config['hCG1']["D"])
 
         item = self.tableWidget.item(3, 1)
-        item.setText(config['fbhCG1']["体重校正参数"])
+        item.setText(config['fbhCG1']["type"])
         item = self.tableWidget.item(3, 2)
         item.setText(config['fbhCG1']["A"])
         item = self.tableWidget.item(3, 3)
@@ -493,7 +493,7 @@ class UiWeight(QDialog):
         item.setText(config['fbhCG1']["D"])
 
         item = self.tableWidget.item(4, 1)
-        item.setText(config['uE31']["体重校正参数"])
+        item.setText(config['uE31']["type"])
         item = self.tableWidget.item(4, 2)
         item.setText(config['uE31']["A"])
         item = self.tableWidget.item(4, 3)
@@ -504,7 +504,7 @@ class UiWeight(QDialog):
         item.setText(config['uE31']["D"])
 
         item = self.tableWidget.item(5, 1)
-        item.setText(config['InhA1']["体重校正参数"])
+        item.setText(config['InhA1']["type"])
         item = self.tableWidget.item(5, 2)
         item.setText(config['InhA1']["A"])
         item = self.tableWidget.item(5, 3)
@@ -515,7 +515,7 @@ class UiWeight(QDialog):
         item.setText(config['InhA1']["D"])
 
         item = self.tableWidget.item(6, 1)
-        item.setText(config['PAPPA1']["体重校正参数"])
+        item.setText(config['PAPPA1']["type"])
         item = self.tableWidget.item(6, 2)
         item.setText(config['PAPPA1']["A"])
         item = self.tableWidget.item(6, 3)
@@ -526,7 +526,7 @@ class UiWeight(QDialog):
         item.setText(config['PAPPA1']["D"])
 
         item = self.tableWidget.item(7, 1)
-        item.setText(config['AFP2']["体重校正参数"])
+        item.setText(config['AFP2']["type"])
         item = self.tableWidget.item(7, 2)
         item.setText(config['AFP2']["A"])
         item = self.tableWidget.item(7, 3)
@@ -537,7 +537,7 @@ class UiWeight(QDialog):
         item.setText(config['AFP2']["D"])
 
         item = self.tableWidget.item(8, 1)
-        item.setText(config['hCG2']["体重校正参数"])
+        item.setText(config['hCG2']["type"])
         item = self.tableWidget.item(8, 2)
         item.setText(config['hCG2']["A"])
         item = self.tableWidget.item(8, 3)
@@ -548,7 +548,7 @@ class UiWeight(QDialog):
         item.setText(config['hCG2']["D"])
 
         item = self.tableWidget.item(9, 1)
-        item.setText(config['fbhCG2']["体重校正参数"])
+        item.setText(config['fbhCG2']["type"])
         item = self.tableWidget.item(9, 2)
         item.setText(config['fbhCG2']["A"])
         item = self.tableWidget.item(9, 3)
@@ -559,7 +559,7 @@ class UiWeight(QDialog):
         item.setText(config['fbhCG2']["D"])
 
         item = self.tableWidget.item(10, 1)
-        item.setText(config['uE32']["体重校正参数"])
+        item.setText(config['uE32']["type"])
         item = self.tableWidget.item(10, 2)
         item.setText(config['uE32']["A"])
         item = self.tableWidget.item(10, 3)
@@ -570,7 +570,7 @@ class UiWeight(QDialog):
         item.setText(config['uE32']["D"])
 
         item = self.tableWidget.item(11, 1)
-        item.setText(config['InhA2']["体重校正参数"])
+        item.setText(config['InhA2']["type"])
         item = self.tableWidget.item(11, 2)
         item.setText(config['InhA2']["A"])
         item = self.tableWidget.item(11, 3)
@@ -581,7 +581,7 @@ class UiWeight(QDialog):
         item.setText(config['InhA2']["D"])
 
         item = self.tableWidget.item(12, 1)
-        item.setText(config['PAPPA2']["体重校正参数"])
+        item.setText(config['PAPPA2']["type"])
         item = self.tableWidget.item(12, 2)
         item.setText(config['PAPPA2']["A"])
         item = self.tableWidget.item(12, 3)

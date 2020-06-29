@@ -143,7 +143,7 @@ class UiDatabase(QDialog):
         if result == "链接成功":
             logger.info("数据库登陆成功！")
             #将配置保存进json文件中
-            load_dict = {"driver" : "{SQL Server}",
+            load_dict = {"driver": "{SQL Server}",
                          "server": self.server_lineEdit.text(),
                          "databaseName": self.database_name_lineEdit.text(),
                          "user": self.user_name_lineEdit.text(),
